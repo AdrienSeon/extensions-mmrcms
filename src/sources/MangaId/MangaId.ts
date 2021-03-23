@@ -18,7 +18,7 @@ export const MangaIdInfo: SourceInfo = {
 			type: TagType.GREEN,
 		},
 		{
-			text: "Polish",
+			text: "Indonesian",
 			type: TagType.GREY,
 		},
 	],
@@ -26,7 +26,7 @@ export const MangaIdInfo: SourceInfo = {
 
 export class MangaId extends Mmrcms {
 	baseUrl: string = MANGAID_DOMAIN;
-	languageCode: LanguageCode = LanguageCode.AAAA; // ! language à verif
+    languageCode: LanguageCode = LanguageCode.INDONESIAN;
 	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
