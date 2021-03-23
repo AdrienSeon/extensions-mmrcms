@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { Puzzmos } from "../Puzzmos/Puzzmos";
+import { Mmrcms } from "..";
+import { Puzzmos } from "../sources/Puzzmos/Puzzmos";
 
 describe("Puzzmos Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

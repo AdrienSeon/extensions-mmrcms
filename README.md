@@ -31,7 +31,6 @@ Contains Paperback sources using the "my Manga Reader CMS" template.
 - [Mangás Yuri](https://mangasyuri.net)
 - [Remangas](https://remangas.top)
 - [MangaHanta](http://mangahanta.com)
-- [NoxSubs](https://noxsubs.com)
 - [Puzzmos](https://puzzmos.com)
 - [Fallen Angels Scans](https://truyen.fascans.com)
 

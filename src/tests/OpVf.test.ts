@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { OpVf } from "../OpVf/OpVf";
+import { Mmrcms } from "..";
+import { OpVf } from "../sources/OpVf/OpVf";
 
 describe("OpVf Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

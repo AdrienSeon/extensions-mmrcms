@@ -116,6 +116,7 @@ coverage
 docs
 
 .idea
+.todo
 
 # mac stuff
 .DS_Store

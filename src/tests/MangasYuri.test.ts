@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { MangasYuri } from "../MangasYuri/MangasYuri";
+import { Mmrcms } from "..";
+import { MangasYuri } from "../sources/MangasYuri/MangasYuri";
 
 describe("MangasYuri Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

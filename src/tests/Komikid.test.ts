@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { Komikid } from "../Komikid/Komikid";
+import { Mmrcms } from "..";
+import { Komikid } from "../sources/Komikid/Komikid";
 
 describe("Komikid Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

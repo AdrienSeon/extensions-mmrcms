@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { LelscanVf } from "../LelscanVf/LelscanVf";
+import { Mmrcms } from "..";
+import { LelscanVf } from "../sources/LelscanVf/LelscanVf";
 
 describe("LelscanVf Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

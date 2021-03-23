@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { Remangas } from "../Remangas/Remangas";
+import { Mmrcms } from "..";
+import { Remangas } from "../sources/Remangas/Remangas";
 
 describe("Remangas Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

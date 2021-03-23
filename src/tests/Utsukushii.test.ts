@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { Utsukushii } from "../Utsukushii/Utsukushii";
+import { Mmrcms } from "..";
+import { Utsukushii } from "../sources/Utsukushii/Utsukushii";
 
 describe("Utsukushii Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

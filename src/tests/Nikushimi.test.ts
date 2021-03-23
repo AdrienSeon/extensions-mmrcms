@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { Nikushimi } from "../Nikushimi/Nikushimi";
+import { Mmrcms } from "..";
+import { Nikushimi } from "../sources/Nikushimi/Nikushimi";
 
 describe("Nikushimi Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

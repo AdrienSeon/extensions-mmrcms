@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { Zahard } from "../Zahard/Zahard";
+import { Mmrcms } from "..";
+import { Zahard } from "../sources/Zahard/Zahard";
 
 describe("Zahard Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

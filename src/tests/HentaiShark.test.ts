@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
-import { Mmrcms } from "../Mmrcms";
-import { HentaiShark } from "../HentaiShark/HentaiShark";
+import { Mmrcms } from "..";
+import { HentaiShark } from "../sources/HentaiShark/HentaiShark";
 
 describe("HentaiShark Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();
