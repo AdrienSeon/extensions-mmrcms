@@ -1,0 +1,362 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>extensions-mmrcms</title>
+	<meta name="description" content="Documentation for extensions-mmrcms">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">extensions-mmrcms</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>extensions-mmrcms</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#paperback-sources" id="paperback-sources" style="color: inherit; text-decoration: none;">
+					<h1>Paperback Sources</h1>
+				</a>
+				<a href="#extensions-mmrcms" id="extensions-mmrcms" style="color: inherit; text-decoration: none;">
+					<h1>extensions-mmrcms</h1>
+				</a>
+				<p>Contains Paperback sources using the &quot;my Manga Reader CMS&quot; template.</p>
+				<a href="#contains-sources" id="contains-sources" style="color: inherit; text-decoration: none;">
+					<h3>Contains sources:</h3>
+				</a>
+				<p><a href="https://onma.me">Onma / مانجا اون لاين</a>
+					<a href="https://manga.utsukushii-bg.com">Utsukushii</a>
+					<a href="https://manga.fascans.com">Fallen Angels</a>
+					<a href="https://manhwas.men">Manhwas Men</a>
+					<a href="https://readcomicsonline.ru">Read Comics Online</a>
+					<a href="https://zahard.top">Zahard</a>
+					<a href="https://leomanga.me">LeoManga</a>
+					<a href="https://mangadoor.com">Mangadoor</a>
+					<a href="https://mangas.in">Mangas.pw</a>
+					<a href="https://submanga.io">submanga</a>
+					<a href="https://www.jpmangas.com">Jpmangas</a>
+					<a href="https://lelscan-vf.com">Lelscan-VF</a>
+					<a href="https://op-vf.com">Op-VF</a>
+					<a href="https://www.scan-fr.cc">Scan FR</a>
+					<a href="https://scan-op.cc">Scan OP</a>
+					<a href="https://www.scan-vf.net">Scan VF</a>
+					<a href="https://scan-1.com">Scan-1</a>
+					<a href="https://adm.komikmanga.com">Komik Manga</a>
+					<a href="https://www.komikid.com">Komikid</a>
+					<a href="https://mangaid.click">MangaID</a>
+					<a href="https://raws.mangazuki.co">Mangazuki Raws</a>
+					<a href="https://www.hentaishark.com">HentaiShark</a>
+					<a href="https://azbivo.webd.pro">Nikushima</a>
+					<a href="https://phoenix-scans.pl">Phoenix-Scans</a>
+					<a href="https://mangasyuri.net">Mangás Yuri</a>
+					<a href="https://remangas.top">Remangas</a>
+					<a href="http://mangahanta.com">MangaHanta</a>
+					<a href="https://noxsubs.com">NoxSubs</a>
+					<a href="https://puzzmos.com">Puzzmos</a>
+				<a href="https://truyen.fascans.com">Fallen Angels Scans</a></p>
+				<a href="#about-sources" id="about-sources" style="color: inherit; text-decoration: none;">
+					<h2>About Sources</h2>
+				</a>
+				<p>Sources were a highly requested feature for Paperback as it allows users to read manga that are otherwise not on MangaDex (The default source of the app). The sources are community-driven, and may be updated and changed without requiring an application update. This allows for a rolling development process, implementing changes as they come in, rather than waiting for the application developer to implement new sources and bugfixes. </p>
+				<a href="#developing-a-source" id="developing-a-source" style="color: inherit; text-decoration: none;">
+					<h2>Developing A Source</h2>
+				</a>
+				<a href="#source-architecture" id="source-architecture" style="color: inherit; text-decoration: none;">
+					<h3>Source Architecture</h3>
+				</a>
+				<p>The two main driving points why the architecture was developed in such a way is to ensure abstraction and a separation of concerns. The extensions do not have direct access to any http libraries. This is to ensure that the developer cannot access/do more than is required.
+				The main driving application architecture is a factory -- it is not aware of any functions other than the ones that are designated are required or optional. The application treats the Source.ts abstract class as a Factory design pattern entry point. The application is able to spawn and run as many sources as it needs to, as long as it&#39;s able to instantiate a child of Source.ts. This allows the application to handle all of the unique URLs and HTTP parsing which each source requires, on an individual basis.</p>
+				<p><img src="https://cdn.discordapp.com/attachments/267036594853249041/723990710247882752/Blank_Diagram.png" alt="Application Diagram"></p>
+				<p>Many of the functions have two parts that are required to be implemented -- the request and the formatting. The request functions are there to give back a properly formatted request. The other part of the function takes the data from the completed request and formats the data to fit the models defined by the function signature.
+				The following sequence diagram shows how the data flows between the application and source. </p>
+				<p><img src="https://cdn.discordapp.com/attachments/267036594853249041/723994905059262484/Blank_Diagram_-_Page_2_1.png" alt="Sequence Diagram"></p>
+				<a href="#updating-a-source" id="updating-a-source" style="color: inherit; text-decoration: none;">
+					<h3>Updating A Source</h3>
+				</a>
+				<p>Updating a source is simple. You just need to change the version number every time you change the code in any way. </p>
+				<a href="#source-documentation" id="source-documentation" style="color: inherit; text-decoration: none;">
+					<h3>Source Documentation</h3>
+				</a>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_fallenangels_fallenangels_.html">&quot;<wbr>Fallen<wbr>Angels/<wbr>Fallen<wbr>Angels&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_fallenangelsscans_fallenangelsscans_.html">&quot;<wbr>Fallen<wbr>Angels<wbr>Scans/<wbr>Fallen<wbr>Angels<wbr>Scans&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_hentaishark_hentaishark_.html">&quot;<wbr>Hentai<wbr>Shark/<wbr>Hentai<wbr>Shark&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_jpmangas_jpmangas_.html">&quot;<wbr>Jpmangas/<wbr>Jpmangas&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_komikmanga_komikmanga_.html">&quot;<wbr>Komik<wbr>Manga/<wbr>Komik<wbr>Manga&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_komikid_komikid_.html">&quot;<wbr>Komikid/<wbr>Komikid&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_lelscanvf_lelscanvf_.html">&quot;<wbr>Lelscan<wbr>Vf/<wbr>Lelscan<wbr>Vf&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_leomanga_leomanga_.html">&quot;<wbr>Leo<wbr>Manga/<wbr>Leo<wbr>Manga&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mangahanta_mangahanta_.html">&quot;<wbr>Manga<wbr>Hanta/<wbr>Manga<wbr>Hanta&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mangaid_mangaid_.html">&quot;<wbr>Manga<wbr>Id/<wbr>Manga<wbr>Id&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mangadoor_mangadoor_.html">&quot;<wbr>Mangadoor/<wbr>Mangadoor&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mangasin_mangasin_.html">&quot;<wbr>Mangas<wbr>In/<wbr>Mangas<wbr>In&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mangasyuri_mangasyuri_.html">&quot;<wbr>Mangas<wbr>Yuri/<wbr>Mangas<wbr>Yuri&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mangazuki_mangazuki_.html">&quot;<wbr>Mangazuki/<wbr>Mangazuki&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mangazukiraws_mangazukiraws_.html">&quot;<wbr>Mangazuki<wbr>Raws/<wbr>Mangazuki<wbr>Raws&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_manhwasmen_manhwasmen_.html">&quot;<wbr>Manhwas<wbr>Men/<wbr>Manhwas<wbr>Men&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mmrcms_.html">&quot;<wbr>Mmrcms&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mmrcmsapiwrapper_.html">&quot;<wbr>MmrcmsAPIWrapper&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_mmrcmsparser_.html">&quot;<wbr>Mmrcms<wbr>Parser&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_nikushimi_nikushimi_.html">&quot;<wbr>Nikushimi/<wbr>Nikushimi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_noxsubs_noxsubs_.html">&quot;<wbr>Nox<wbr>Subs/<wbr>Nox<wbr>Subs&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_onma_onma_.html">&quot;<wbr>Onma/<wbr>Onma&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_opvf_opvf_.html">&quot;<wbr>OpVf/<wbr>OpVf&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_phoenixscans_phoenixscans_.html">&quot;<wbr>Phoenix<wbr>Scans/<wbr>Phoenix<wbr>Scans&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_puzzmos_puzzmos_.html">&quot;<wbr>Puzzmos/<wbr>Puzzmos&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_readcomicsonlineru_readcomicsonlineru_.html">&quot;<wbr>Read<wbr>Comics<wbr>Online<wbr>Ru/<wbr>Read<wbr>Comics<wbr>Online<wbr>Ru&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_remangas_remangas_.html">&quot;<wbr>Remangas/<wbr>Remangas&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_scan1_scan1_.html">&quot;<wbr>Scan1/<wbr>Scan1&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_scanfr_scanfr_.html">&quot;<wbr>Scan<wbr>Fr/<wbr>Scan<wbr>Fr&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_scanop_scanop_.html">&quot;<wbr>Scan<wbr>Op/<wbr>Scan<wbr>Op&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_scanvf_scanvf_.html">&quot;<wbr>Scan<wbr>Vf/<wbr>Scan<wbr>Vf&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_submanga_submanga_.html">&quot;<wbr>Submanga/<wbr>Submanga&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_utsukushii_utsukushii_.html">&quot;<wbr>Utsukushii/<wbr>Utsukushii&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_zahard_zahard_.html">&quot;<wbr>Zahard/<wbr>Zahard&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_fallenangels_test_.html">&quot;tests/<wbr>Fallen<wbr>Angels.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_fallenangelsscans_test_.html">&quot;tests/<wbr>Fallen<wbr>Angels<wbr>Scans.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_hentaishark_test_.html">&quot;tests/<wbr>Hentai<wbr>Shark.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_jpmangas_test_.html">&quot;tests/<wbr>Jpmangas.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_komikmanga_test_.html">&quot;tests/<wbr>Komik<wbr>Manga.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_komikid_test_.html">&quot;tests/<wbr>Komikid.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_lelscanvf_test_.html">&quot;tests/<wbr>Lelscan<wbr>Vf.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_leomanga_test_.html">&quot;tests/<wbr>Leo<wbr>Manga.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_mangahanta_test_.html">&quot;tests/<wbr>Manga<wbr>Hanta.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_mangaid_test_.html">&quot;tests/<wbr>Manga<wbr>Id.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_mangadoor_test_.html">&quot;tests/<wbr>Mangadoor.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_mangasin_test_.html">&quot;tests/<wbr>Mangas<wbr>In.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_mangasyuri_test_.html">&quot;tests/<wbr>Mangas<wbr>Yuri.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_mangazuki_test_.html">&quot;tests/<wbr>Mangazuki.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_mangazukiraws_test_.html">&quot;tests/<wbr>Mangazuki<wbr>Raws.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_manhwasmen_test_.html">&quot;tests/<wbr>Manhwas<wbr>Men.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_nikushimi_test_.html">&quot;tests/<wbr>Nikushimi.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_noxsubs_test_.html">&quot;tests/<wbr>Nox<wbr>Subs.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_onma_test_.html">&quot;tests/<wbr>Onma.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_opvf_test_.html">&quot;tests/<wbr>OpVf.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_phoenixscans_test_.html">&quot;tests/<wbr>Phoenix<wbr>Scans.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_puzzmos_test_.html">&quot;tests/<wbr>Puzzmos.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_readcomicsonlineru_test_.html">&quot;tests/<wbr>Read<wbr>Comics<wbr>Online<wbr>Ru.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_remangas_test_.html">&quot;tests/<wbr>Remangas.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_scan1_test_.html">&quot;tests/<wbr>Scan1.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_scanfr_test_.html">&quot;tests/<wbr>Scan<wbr>Fr.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_scanop_test_.html">&quot;tests/<wbr>Scan<wbr>Op.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_scanvf_test_.html">&quot;tests/<wbr>Scan<wbr>Vf.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_submanga_test_.html">&quot;tests/<wbr>Submanga.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_utsukushii_test_.html">&quot;tests/<wbr>Utsukushii.test&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tests_zahard_test_.html">&quot;tests/<wbr>Zahard.test&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
