@@ -151,7 +151,7 @@ export class Parser {
 
 	parseHomeSections($: CheerioStatic, source: any, sectionId: string): MangaTile[] {
 		let mangaTiles: MangaTile[] = [];
-
+        
 		if (sectionId === "1_recently_updated") {
 			mangaTiles = mangaTiles.concat(this.parseLatestRelease($, source));
 		} else {
@@ -194,7 +194,8 @@ export class Parser {
 	}
 
 	private parseLatestRelease($: CheerioStatic, source: any): MangaTile[] {
-		const mangaTiles: MangaTile[] = [];
+        const mangaTiles: MangaTile[] = [];
+        const collectedIds: string[] = [];
 		const context = $("div.mangalist");
 		let id: string = "";
 		let image: string = "";
@@ -204,22 +205,26 @@ export class Parser {
 			id = ($("a", element).first().attr("href") ?? "").split("/").pop() ?? "";
 			image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
 			title = $("a", element).first().text().trim();
-			chapter = "Chapter " + $(".manga-chapter a", element).text().trim();
-			mangaTiles.push(
-				createMangaTile({
-					id,
-					image,
-					title: createIconText({ text: title }),
-					subtitleText: createIconText({ text: chapter }),
-				})
-			);
+            chapter = "Chapter " + $(".manga-chapter a", element).text().trim();
+            if (!collectedIds.includes(id)) {
+                mangaTiles.push(
+                    createMangaTile({
+                        id,
+                        image,
+                        title: createIconText({ text: title }),
+                        subtitleText: createIconText({ text: chapter }),
+                    })
+                );
+                collectedIds.push(id);
+            }
 		}
 
 		return mangaTiles;
 	}
 
 	private parseFilterList($: CheerioStatic, source: any): MangaTile[] {
-		const mangaTiles: MangaTile[] = [];
+        const mangaTiles: MangaTile[] = [];
+        const collectedIds: string[] = [];
 		let id: string = "";
 		let image: string = "";
 		let title: string = "";
@@ -228,21 +233,18 @@ export class Parser {
 			id = ($("a.chart-title", element).attr("href") ?? "").split("/").pop() ?? "";
 			image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
 			title = $("a.chart-title", element).text().trim();
-			views =
-				$("i.fa-eye", element)
-					.parent()
-					.text()
-					.replace(/\s+/g, " ")
-					.trim()
-					.replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " views";
-			mangaTiles.push(
-				createMangaTile({
-					id,
-					image,
-					title: createIconText({ text: title }),
-					subtitleText: createIconText({ text: views }),
-				})
-			);
+			views = $("i.fa-eye", element).parent().text().replace(/\s+/g, " ").trim().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " views";
+            if (!collectedIds.includes(id)) {
+                mangaTiles.push(
+                    createMangaTile({
+                        id,
+                        image,
+                        title: createIconText({ text: title }),
+                        subtitleText: createIconText({ text: views }),
+                    })
+                );
+                collectedIds.push(id);
+            }
 		}
 
 		return mangaTiles;

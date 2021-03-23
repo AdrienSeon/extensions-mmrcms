@@ -8,7 +8,7 @@
     "test": "node_modules/.bin/mocha --timeout 300000 -r ts-node/register src/**/*.test.ts --grep 'Testing home page results for CURRENTLY TRENDING titles'",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "bundle": "paperback bundle --sourceslocation=sources",
-    "serve": "paperback serve -p 8000 --nobundle"
+    "serve": "paperback bundle --sourceslocation=sources && paperback serve -p 8000 --nobundle"
   },
   "repository": {
     "type": "git",
