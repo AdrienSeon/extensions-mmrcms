@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms } from "../..";
 
-const MANGAZUKIRAWS_DOMAIN = "https://raws.mangazuki.co";
-
 export const MangazukiRawsInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Mangazuki Raws",
@@ -11,7 +9,7 @@ export const MangazukiRawsInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: MANGAZUKIRAWS_DOMAIN,
+	websiteBaseURL: "https://raws.mangazuki.co",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -29,7 +27,7 @@ export const MangazukiRawsInfo: SourceInfo = {
 };
 
 export class MangazukiRaws extends Mmrcms {
-	baseUrl: string = MANGAZUKIRAWS_DOMAIN;
+    name: string = MangazukiRawsInfo.name;
+	baseUrl: string = MangazukiRawsInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.KOREAN;
-	sourceTraversalPathName: string = "manga";
 }

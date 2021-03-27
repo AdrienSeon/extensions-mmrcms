@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms } from "../..";
 
-const MANGAZUKI_DOMAIN = "https://mangazuki.co";
-
 export const MangazukiInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Mangazuki",
@@ -11,7 +9,7 @@ export const MangazukiInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: MANGAZUKI_DOMAIN,
+	websiteBaseURL: "https://mangazuki.co",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,7 +23,7 @@ export const MangazukiInfo: SourceInfo = {
 };
 
 export class Mangazuki extends Mmrcms {
-	baseUrl: string = MANGAZUKI_DOMAIN;
+    name: string = MangazukiInfo.name;
+	baseUrl: string = MangazukiInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.ENGLISH;
-	sourceTraversalPathName: string = "manga";
 }

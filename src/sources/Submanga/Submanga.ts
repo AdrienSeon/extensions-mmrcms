@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const SUBMANGA_DOMAIN = "https://submanga.io";
-
 export const SubmangaInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Submanga",
@@ -11,7 +9,7 @@ export const SubmangaInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: SUBMANGA_DOMAIN,
+	websiteBaseURL: "https://submanga.io",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,10 @@ export const SubmangaInfo: SourceInfo = {
 };
 
 export class Submanga extends Mmrcms {
-	baseUrl: string = SUBMANGA_DOMAIN;
-	languageCode: LanguageCode = LanguageCode.SPANISH;
-	sourceTraversalPathName: string = "manga";
+    name: string = SubmangaInfo.name;
+	baseUrl: string = SubmangaInfo.websiteBaseURL;
+    languageCode: LanguageCode = LanguageCode.SPANISH;
+    latestIsInListFormat: boolean = false;
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Accion" },
 		{ id: "2", name: "Aventura" },

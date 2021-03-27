@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory, SourceTag } from "../..";
 
-const PHOENIXSCANS_DOMAIN = "https://phoenix-scans.pl";
-
 export const PhoenixScansInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Phoenix-Scans",
@@ -11,7 +9,7 @@ export const PhoenixScansInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: PHOENIXSCANS_DOMAIN,
+	websiteBaseURL: "https://phoenix-scans.pl",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const PhoenixScansInfo: SourceInfo = {
 };
 
 export class PhoenixScans extends Mmrcms {
-	baseUrl: string = PHOENIXSCANS_DOMAIN;
+    name: string = PhoenixScansInfo.name;
+	baseUrl: string = PhoenixScansInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.POLISH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Shounen" },
 		{ id: "2", name: "Tragedia" },

@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory, SourceTag } from "../..";
 
-const MANHWASMAN_DOMAIN = "https://manhwas.men/";
-
 export const ManhwasMenInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Manhwas.men",
@@ -11,7 +9,7 @@ export const ManhwasMenInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: MANHWASMAN_DOMAIN,
+	websiteBaseURL: "https://manhwas.men/",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -21,9 +19,9 @@ export const ManhwasMenInfo: SourceInfo = {
 };
 
 export class ManhwasMen extends Mmrcms {
-	baseUrl: string = MANHWASMAN_DOMAIN;
+    name: string = ManhwasMenInfo.name;
+	baseUrl: string = ManhwasMenInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.ENGLISH;
-    sourceTraversalPathName: string = "manga";
     sourceCategories: SourceCategory[] = [
         { "id": "1", "name": "Action" },
         { "id": "2", "name": "Adventure" },

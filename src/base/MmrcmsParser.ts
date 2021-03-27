@@ -149,18 +149,6 @@ export class Parser {
 		return results;
 	}
 
-	parseHomeSections($: CheerioStatic, source: any, sectionId: string): MangaTile[] {
-		let mangaTiles: MangaTile[] = [];
-        
-		if (sectionId === "1_recently_updated") {
-			mangaTiles = mangaTiles.concat(this.parseLatestRelease($, source));
-		} else {
-			mangaTiles = mangaTiles.concat(this.parseFilterList($, source));
-		}
-
-		return mangaTiles;
-	}
-
 	filterUpdatedManga($: CheerioSelector, time: Date, ids: string[], source: any): { updates: string[]; loadNextPage: boolean } {
 		let passedReferenceTime = false;
 		let updatedManga: string[] = [];
@@ -193,19 +181,23 @@ export class Parser {
 		}
 	}
 
-	private parseLatestRelease($: CheerioStatic, source: any): MangaTile[] {
+	parseLatestRelease($: CheerioStatic, source: any): MangaTile[] {
         const mangaTiles: MangaTile[] = [];
         const collectedIds: string[] = [];
-		const context = $("div.mangalist");
-		let id: string = "";
-		let image: string = "";
-		let title: string = "";
-		let chapter: string = "";
-		for (const element of $("div.manga-item", context).toArray()) {
-			id = ($("a", element).first().attr("href") ?? "").split("/").pop() ?? "";
-			image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
-			title = $("a", element).first().text().trim();
-            chapter = "Chapter " + $(".manga-chapter a", element).text().trim();
+        return source.latestIsInListFormat ? this.parseLatestList($, source, collectedIds, mangaTiles) : this.parseLatestGrid($, source, collectedIds, mangaTiles);
+	}
+
+    private parseLatestList($: CheerioStatic, source: any, collectedIds: string[], mangaTiles: MangaTile[]) {
+        const context: Cheerio = $("div.mangalist");
+        let id: string = "";
+        let image: string = "";
+        let title: string = "";
+        let chapter: string = "";
+        for (const element of $("div.manga-item", context).toArray()) {
+            id = ($(source.latestListSelector, element).attr("href") ?? "").split("/").pop() ?? "";
+            image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
+            title = $(source.latestListSelector, element).text().trim();
+            chapter = "Chapter " + ($("h6.events-subtitle a", element).text().replace(/\s+/g, " ").trim().match(/\d+\.?\d+/g) ?? [""])[0];
             if (!collectedIds.includes(id)) {
                 mangaTiles.push(
                     createMangaTile({
@@ -217,23 +209,76 @@ export class Parser {
                 );
                 collectedIds.push(id);
             }
-		}
+        }
+        return mangaTiles;
+    }
 
-		return mangaTiles;
-	}
+    private parseLatestGrid($: CheerioStatic, source: any, collectedIds: string[], mangaTiles: MangaTile[]) {
+        const context: Cheerio = $("div.mangalist, div.grid-manga, div#destacados");
+        let id: string = "";
+        let image: string = "";
+        let title: string = "";
+        let chapter: string = "";
+        for (const element of $("div.manga-item, div.thumbnail", context).toArray()) {
+            id = ($("a.chart-title:first-of-type, .caption h3 a", element).attr("href") ?? "").split("/").pop() ?? "";
+            image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
+            title = $("a.chart-title:first-of-type, .caption h3 a", element).text().trim();
+            chapter = "Chapter " + ($("div.media-body a:last-of-type, .caption p", element).text().replace(/\s+/g, " ").trim().match(/\d+\.?\d+/g) ?? [""])[0];
+            if (!collectedIds.includes(id)) {
+                mangaTiles.push(
+                    createMangaTile({
+                        id,
+                        image,
+                        title: createIconText({ text: title }),
+                        subtitleText: createIconText({ text: chapter }),
+                    })
+                );
+                collectedIds.push(id);
+            }
+        }
+        return mangaTiles;
+    }
 
-	private parseFilterList($: CheerioStatic, source: any): MangaTile[] {
+	parseFilterList($: CheerioStatic, source: any): MangaTile[] {
         const mangaTiles: MangaTile[] = [];
         const collectedIds: string[] = [];
 		let id: string = "";
 		let image: string = "";
 		let title: string = "";
-		let views: string = "";
-		for (const element of $(".media").toArray()) {
-			id = ($("a.chart-title", element).attr("href") ?? "").split("/").pop() ?? "";
-			image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
-			title = $("a.chart-title", element).text().trim();
-			views = $("i.fa-eye", element).parent().text().replace(/\s+/g, " ").trim().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " views";
+        let views: string = "";
+        
+        for (const element of source.filterListElementsWrapper.toArray()) {
+            // Id and title
+            const idNode = $(".chart-title", element)
+            if (idNode.length > 0) {
+                id = (idNode.attr("href") ?? "").split("/").pop() ?? "";
+                title = this.decodeHTMLEntity(idNode.text().replace(/\s+/g, " ").trim());
+            } else {
+                id = ($("a").attr("href") ?? "").split("/").pop() ?? "";
+                const captionNode = $("div.caption", element)
+                const captionNodeH3 = $("h3", captionNode)
+                if (captionNodeH3.length > 0) {
+                    title = this.decodeHTMLEntity(captionNodeH3.text()); // Submanga
+                } else {
+                    title = this.decodeHTMLEntity(captionNode.text().replace(/\s+/g, " ").trim()); // HentaiShark
+                }
+            }
+            // Image
+            const imageNode = $("img", element)
+            if ((imageNode.attr("data-background-image") ?? "").length > 0) {
+                image = imageNode.attr("data-background-image") ?? "" // Utsukushii
+            } else if ((imageNode.attr("data-src") ?? "").length > 0) {
+                image = this.coverGuess(imageNode.attr("data-src") ?? "", id, source)
+            } else {
+                image = this.coverGuess(imageNode.attr("src") ?? "", id, source)
+            }
+            // Subtitle
+            if (($("i.fa-eye", element).parent().text() ?? "").length > 0) {
+                views = $("i.fa-eye", element).parent().text().replace(/\s+/g, " ").trim().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " views";
+            } else {
+                views = ""
+            }
+            // Push results
             if (!collectedIds.includes(id)) {
                 mangaTiles.push(
                     createMangaTile({
@@ -246,7 +291,6 @@ export class Parser {
                 collectedIds.push(id);
             }
 		}
-
 		return mangaTiles;
 	}
 
@@ -269,5 +313,15 @@ export class Parser {
 		return str.replace(/&#(\d+);/g, function (match, dec) {
 			return String.fromCharCode(dec);
 		});
-	}
+    }
+    
+    coverGuess(url: string, mangaId: string, source: any): string {
+        if (url.endsWith("no-image.png") === true) {
+            return `${source.baseUrl}/uploads/manga/${mangaId}/cover/cover_250x350.jpg`
+        }
+        if (url.startsWith("//")) {
+            return source.baseUrl.split("//")[0] + url // Fallen Angels
+        }
+        return url
+    }
 }

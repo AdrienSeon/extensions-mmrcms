@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms } from "../..";
 
-const OPVF_DOMAIN = "https://op-vf.com";
-
 export const OpVfInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Op-VF",
@@ -11,7 +9,7 @@ export const OpVfInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: OPVF_DOMAIN,
+	websiteBaseURL: "https://op-vf.com",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -20,12 +18,16 @@ export const OpVfInfo: SourceInfo = {
 		{
 			text: "French",
 			type: TagType.GREY,
+        },
+		{
+			text: "Cloudflare",
+			type: TagType.RED,
 		},
 	],
 };
 
 export class OpVf extends Mmrcms {
-	baseUrl: string = OPVF_DOMAIN;
+    name: string = OpVfInfo.name;
+	baseUrl: string = OpVfInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.FRENCH;
-	sourceTraversalPathName: string = "manga";
 }

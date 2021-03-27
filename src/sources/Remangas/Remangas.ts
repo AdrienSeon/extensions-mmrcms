@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory, SourceTag } from "../..";
 
-const REMANGAS_DOMAIN = "https://remangas.top";
-
 export const RemangasInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Remangas",
@@ -11,7 +9,7 @@ export const RemangasInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: REMANGAS_DOMAIN,
+	websiteBaseURL: "https://remangas.top",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const RemangasInfo: SourceInfo = {
 };
 
 export class Remangas extends Mmrcms {
-	baseUrl: string = REMANGAS_DOMAIN;
+    name: string = RemangasInfo.name;
+	baseUrl: string = RemangasInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.PORTUGUESE;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Ação" },
 		{ id: "2", name: "Aventura" },

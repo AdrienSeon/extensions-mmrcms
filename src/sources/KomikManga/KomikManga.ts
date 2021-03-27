@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const KOMIKMANGA_DOMAIN = "https://adm.komikmanga.com";
-
 export const KomikMangaInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Komik Manga",
@@ -11,7 +9,7 @@ export const KomikMangaInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: KOMIKMANGA_DOMAIN,
+	websiteBaseURL: "https://adm.komikmanga.com",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const KomikMangaInfo: SourceInfo = {
 };
 
 export class KomikManga extends Mmrcms {
-	baseUrl: string = KOMIKMANGA_DOMAIN;
+    name: string = KomikMangaInfo.name;
+	baseUrl: string = KomikMangaInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.POLISH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

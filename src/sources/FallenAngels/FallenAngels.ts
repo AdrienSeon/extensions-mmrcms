@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const FALLENANGELS_DOMAIN = "https://manga.fascans.com";
-
 export const FallenAngelsInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Fallen Angels",
@@ -11,7 +9,7 @@ export const FallenAngelsInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: FALLENANGELS_DOMAIN,
+	websiteBaseURL: "https://manga.fascans.com",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -21,9 +19,9 @@ export const FallenAngelsInfo: SourceInfo = {
 };
 
 export class FallenAngels extends Mmrcms {
-	baseUrl: string = FALLENANGELS_DOMAIN;
+    name: string = FallenAngelsInfo.name;
+	baseUrl: string = FallenAngelsInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.ENGLISH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

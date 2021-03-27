@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const SCANVF_DOMAIN = "https://www.scan-vf.net";
-
 export const ScanVfInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Scan-VF",
@@ -11,7 +9,7 @@ export const ScanVfInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: SCANVF_DOMAIN,
+	websiteBaseURL: "https://www.scan-vf.net",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,7 +23,8 @@ export const ScanVfInfo: SourceInfo = {
 };
 
 export class ScanVf extends Mmrcms {
-	baseUrl: string = SCANVF_DOMAIN;
+    name: string = ScanVfInfo.name;
+	baseUrl: string = ScanVfInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.FRENCH;
 	sourceTraversalPathName: string = "";
 	sourceCategories: SourceCategory[] = [

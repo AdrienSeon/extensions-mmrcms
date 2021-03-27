@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const MANGAID_DOMAIN = "https://mangaid.click";
-
 export const MangaIdInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "MangaID",
@@ -11,7 +9,7 @@ export const MangaIdInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: MANGAID_DOMAIN,
+	websiteBaseURL: "https://mangaid.click",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,10 @@ export const MangaIdInfo: SourceInfo = {
 };
 
 export class MangaId extends Mmrcms {
-	baseUrl: string = MANGAID_DOMAIN;
+    name: string = MangaIdInfo.name;
+	baseUrl: string = MangaIdInfo.websiteBaseURL;
     languageCode: LanguageCode = LanguageCode.INDONESIAN;
-	sourceTraversalPathName: string = "manga";
+    latestIsInListFormat: boolean = false;
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const JPMANGAS_DOMAIN = "https://www.komikid.com";
-
 export const KomikidInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Komikid",
@@ -11,7 +9,7 @@ export const KomikidInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: JPMANGAS_DOMAIN,
+	websiteBaseURL: "https://www.komikid.com",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const KomikidInfo: SourceInfo = {
 };
 
 export class Komikid extends Mmrcms {
-	baseUrl: string = JPMANGAS_DOMAIN;
+    name: string = KomikidInfo.name;
+	baseUrl: string = KomikidInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.POLISH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

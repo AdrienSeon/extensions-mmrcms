@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory, SourceTag } from "../..";
 
-const SCANOP_DOMAIN = "https://scan-op.cc";
-
 export const ScanOpInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Scan-OP",
@@ -11,7 +9,7 @@ export const ScanOpInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: SCANOP_DOMAIN,
+	websiteBaseURL: "https://scan-op.cc",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const ScanOpInfo: SourceInfo = {
 };
 
 export class ScanOp extends Mmrcms {
-	baseUrl: string = SCANOP_DOMAIN;
+    name: string = ScanOpInfo.name;
+	baseUrl: string = ScanOpInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.FRENCH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Comedy" },
 		{ id: "2", name: "Doujinshi" },

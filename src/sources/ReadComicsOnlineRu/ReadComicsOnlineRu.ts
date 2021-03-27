@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const READCOMICSONLINERU_DOMAIN = "https://readcomicsonline.ru";
-
 export const ReadComicsOnlineRuInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "ReadComicsOnline.ru",
@@ -11,7 +9,7 @@ export const ReadComicsOnlineRuInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: READCOMICSONLINERU_DOMAIN,
+	websiteBaseURL: "https://readcomicsonline.ru",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -21,7 +19,8 @@ export const ReadComicsOnlineRuInfo: SourceInfo = {
 };
 
 export class ReadComicsOnlineRu extends Mmrcms {
-	baseUrl: string = READCOMICSONLINERU_DOMAIN;
+    name: string = ReadComicsOnlineRuInfo.name;
+	baseUrl: string = ReadComicsOnlineRuInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.ENGLISH;
 	sourceTraversalPathName: string = "comic";
 	sourceCategories: SourceCategory[] = [

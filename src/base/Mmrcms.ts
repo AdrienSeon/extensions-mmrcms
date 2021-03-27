@@ -3,6 +3,11 @@ import { Chapter,ChapterDetails,HomeSection,LanguageCode,Manga,MangaTile,MangaUp
 import { Parser } from './MmrcmsParser'
 import { SourceCategory, SourceTag } from "../models";
 export abstract class Mmrcms extends Source {
+    /**
+	 * The name of the mMRCMS source. Eg. Fallen Angels
+	 */
+    abstract name: string;
+
 	/**
 	 * The url of the mMRCMS source. Eg. https://www.scan-vf.net
 	 */
@@ -18,8 +23,22 @@ export abstract class Mmrcms extends Source {
 	 * Eg. for https://submanga.io/manga/domestic-na-kanojo/ it would be 'manga'.
 	 * Used in all functions.
 	 */
-	abstract sourceTraversalPathName: string = "manga";
+	sourceTraversalPathName: string = "manga";
 
+    /**
+     * Is /latest-release page in list format (false if grid format)
+     */
+    latestIsInListFormat: boolean = true;
+
+    /**
+     * Cheerio selector for the manga link in /latest-release page in list format
+     */
+    latestListSelector: string = "a:first-of-type";
+
+    /**
+     * Cheerio selector for the list wrapper element in /filterList page
+     */
+    filterListElementsWrapper: string = "div[class^=col-sm], div.col-xs-6";
 	/**
 	 * Array of corresponding ids and categories for this mMRCMS source.
 	 */
@@ -183,24 +202,31 @@ export abstract class Mmrcms extends Source {
 				}),
 			},
 		];
-
 		const promises: Promise<void>[] = [];
-
 		for (const section of sections) {
 			// Loading empty sections
 			sectionCallback(section.section);
-
 			// Populating section data
 			promises.push(
 				this.requestManager.schedule(section.request, 1).then((response) => {
 					this.CloudFlareError(response.status);
-					const $ = this.cheerio.load(response.data);
-					section.section.items = this.parser.parseHomeSections($, this, section.section.id);
+                    const $ = this.cheerio.load(response.data);
+                    switch (section.section.id) {
+                        case "1_recently_updated": {
+                            section.section.items = this.parser.parseLatestRelease($, this);
+                            break;
+                        }
+                        case "2_currenty_trending": {
+                            section.section.items = this.parser.parseFilterList($, this);
+                            break;
+                        }
+                        default:
+                            console.log('getHomePageSections(): Invalid section ID')
+                    }
 					sectionCallback(section.section);
 				})
 			);
 		}
-
 		// Make sure the function completes
 		await Promise.all(promises);
 	}
@@ -226,9 +252,22 @@ export abstract class Mmrcms extends Source {
 			headers: this.constructHeaders({}),
 			param,
 		});
-		const response = await this.requestManager.schedule(request, 1);
-		const $ = this.cheerio.load(response.data);
-		const mangaTiles = this.parser.parseHomeSections($, this, homepageSectionId);
+        const response = await this.requestManager.schedule(request, 1);
+        this.CloudFlareError(response.status);
+        const $ = this.cheerio.load(response.data);
+        let mangaTiles: MangaTile[] = [];
+        switch (homepageSectionId) {
+            case "1_recently_updated": {
+                mangaTiles = this.parser.parseLatestRelease($, this);
+                break;
+            }
+            case "2_currenty_trending": {
+                mangaTiles = this.parser.parseFilterList($, this);
+                break;
+            }
+            default:
+                return Promise.resolve(null);
+        }
 
 		// TODO isLastPage
 

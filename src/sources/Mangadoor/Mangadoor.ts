@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms } from "../..";
 
-const MANGADOOR_DOMAIN = "https://mangadoor.com";
-
 export const MangadoorInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Mangadoor",
@@ -11,7 +9,7 @@ export const MangadoorInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: MANGADOOR_DOMAIN,
+	websiteBaseURL: "https://mangadoor.com",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -20,12 +18,16 @@ export const MangadoorInfo: SourceInfo = {
 		{
 			text: "Spanish",
 			type: TagType.GREY,
+        },
+		{
+			text: "Cloudflare",
+			type: TagType.RED,
 		},
 	],
 };
 
 export class Mangadoor extends Mmrcms {
-	baseUrl: string = MANGADOOR_DOMAIN;
+    name: string = MangadoorInfo.name;
+	baseUrl: string = MangadoorInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.SPANISH;
-	sourceTraversalPathName: string = "manga";
 }

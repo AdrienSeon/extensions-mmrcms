@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const MANGASIN_DOMAIN = "https://mangas.in";
-
 export const MangasInInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Mangas.in",
@@ -11,7 +9,7 @@ export const MangasInInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: MANGASIN_DOMAIN,
+	websiteBaseURL: "https://mangas.in",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,10 @@ export const MangasInInfo: SourceInfo = {
 };
 
 export class MangasIn extends Mmrcms {
-	baseUrl: string = MANGASIN_DOMAIN;
+    name: string = MangasInInfo.name;
+	baseUrl: string = MangasInInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.SPANISH;
-	sourceTraversalPathName: string = "manga";
+    latestListSelector: string = "a.fa-info-circle + a"
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

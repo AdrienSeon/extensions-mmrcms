@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const SCANFR_DOMAIN = "https://www.scan-fr.cc";
-
 export const ScanFrInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Scan-FR",
@@ -11,7 +9,7 @@ export const ScanFrInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: SCANFR_DOMAIN,
+	websiteBaseURL: "https://www.scan-fr.cc",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -21,13 +19,17 @@ export const ScanFrInfo: SourceInfo = {
 			text: "French",
 			type: TagType.GREY,
 		},
+		{
+			text: "Cloudflare",
+			type: TagType.RED,
+		},
 	],
 };
 
 export class ScanFr extends Mmrcms {
-	baseUrl: string = SCANFR_DOMAIN;
+    name: string = ScanFrInfo.name;
+	baseUrl: string = ScanFrInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.FRENCH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Comedy" },
 		{ id: "2", name: "Doujinshi" },

@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory, SourceTag } from "../..";
 
-const LEOMANGA_DOMAIN = "https://leomanga.me";
-
 export const LeoMangaInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "LeoManga",
@@ -11,7 +9,7 @@ export const LeoMangaInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: LEOMANGA_DOMAIN,
+	websiteBaseURL: "https://leomanga.me",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -20,14 +18,19 @@ export const LeoMangaInfo: SourceInfo = {
 		{
 			text: "Spanish",
 			type: TagType.GREY,
+        },
+        {
+			text: "Cloudflare",
+			type: TagType.RED,
 		},
 	],
 };
 
 export class LeoManga extends Mmrcms {
-	baseUrl: string = LEOMANGA_DOMAIN;
-	languageCode: LanguageCode = LanguageCode.SPANISH;
-	sourceTraversalPathName: string = "manga";
+    name: string = LeoMangaInfo.name;
+	baseUrl: string = LeoMangaInfo.websiteBaseURL;
+    languageCode: LanguageCode = LanguageCode.SPANISH;
+    latestIsInListFormat: boolean = false;
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Accion" },
 		{ id: "2", name: "Aventura" },

@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const HENTAISHARK_DOMAIN = "https://www.hentaishark.com";
-
 export const HentaiSharkInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Hentai Shark",
@@ -11,19 +9,23 @@ export const HentaiSharkInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: true,
-	websiteBaseURL: HENTAISHARK_DOMAIN,
+	websiteBaseURL: "https://www.hentaishark.com",
 	sourceTags: [
 		{
 			text: "Notifications",
 			type: TagType.GREEN,
+        },
+		{
+			text: "Cloudflare",
+			type: TagType.RED,
 		},
 	],
 };
 
 export class HentaiShark extends Mmrcms {
-	baseUrl: string = HENTAISHARK_DOMAIN;
+    name: string = HentaiSharkInfo.name;
+	baseUrl: string = HentaiSharkInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.UNKNOWN;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Doujinshi" },
 		{ id: "2", name: "Manga" },

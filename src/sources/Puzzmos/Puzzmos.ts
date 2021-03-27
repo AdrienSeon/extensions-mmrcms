@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory, SourceTag } from "../..";
 
-const PUZZMOS_DOMAIN = "https://puzzmos.com";
-
 export const PuzzmosInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Puzzmos",
@@ -11,7 +9,7 @@ export const PuzzmosInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: PUZZMOS_DOMAIN,
+	websiteBaseURL: "https://puzzmos.com",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const PuzzmosInfo: SourceInfo = {
 };
 
 export class Puzzmos extends Mmrcms {
-	baseUrl: string = PUZZMOS_DOMAIN;
+    name: string = PuzzmosInfo.name;
+	baseUrl: string = PuzzmosInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.TURKISH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

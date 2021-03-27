@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const LELSCANVF_DOMAIN = "https://lelscan-vf.co";
-
 export const LelscanVfInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Lelscan-VF",
@@ -11,7 +9,7 @@ export const LelscanVfInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: LELSCANVF_DOMAIN,
+	websiteBaseURL: "https://lelscan-vf.co",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const LelscanVfInfo: SourceInfo = {
 };
 
 export class LelscanVf extends Mmrcms {
-	baseUrl: string = LELSCANVF_DOMAIN;
+    name: string = LelscanVfInfo.name;
+	baseUrl: string = LelscanVfInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.FRENCH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

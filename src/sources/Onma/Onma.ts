@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms } from "../..";
 
-const ONMA_DOMAIN = "https://onma.me";
-
 export const OnmaInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "مانجا اون لاين",
@@ -11,7 +9,7 @@ export const OnmaInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: ONMA_DOMAIN,
+	websiteBaseURL: "https://onma.me",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,7 +23,7 @@ export const OnmaInfo: SourceInfo = {
 };
 
 export class Onma extends Mmrcms {
-	baseUrl: string = ONMA_DOMAIN;
+    name: string = OnmaInfo.name;
+	baseUrl: string = OnmaInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.UNKNOWN; // ! ARABIC enum not implemented
-	sourceTraversalPathName: string = "manga";
 }

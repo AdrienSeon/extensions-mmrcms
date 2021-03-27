@@ -21,9 +21,9 @@ export const ZahardInfo: SourceInfo = {
 };
 
 export class Zahard extends Mmrcms {
+    name: string = ZahardInfo.name;
 	baseUrl: string = ZAHARD_DOMAIN;
 	languageCode: LanguageCode = LanguageCode.ENGLISH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

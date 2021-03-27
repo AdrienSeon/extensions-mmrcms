@@ -2,8 +2,6 @@ import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms } from "../..";
 import { SourceCategory } from "../../models/SourceCategory/SourceCategory";
 
-const UTSUKUSHII_DOMAIN = "https://manga.utsukushii-bg.com";
-
 export const UtsukushiiInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Utsukushii",
@@ -12,7 +10,7 @@ export const UtsukushiiInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: UTSUKUSHII_DOMAIN,
+	websiteBaseURL: "https://manga.utsukushii-bg.com",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -26,9 +24,10 @@ export const UtsukushiiInfo: SourceInfo = {
 };
 
 export class Utsukushii extends Mmrcms {
-	baseUrl: string = UTSUKUSHII_DOMAIN;
-	languageCode: LanguageCode = LanguageCode.RUSSIAN;
-	sourceTraversalPathName: string = "manga";
+    name: string = UtsukushiiInfo.name;
+	baseUrl: string = UtsukushiiInfo.websiteBaseURL;
+    languageCode: LanguageCode = LanguageCode.RUSSIAN;
+    filterListElementsWrapper: string = "div.content div.col-sm-6";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Екшън" },
 		{ id: "2", name: "Приключенски" },

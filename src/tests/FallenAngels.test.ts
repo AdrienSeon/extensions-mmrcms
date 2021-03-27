@@ -1,4 +1,5 @@
 import cheerio from 'cheerio'
+import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
 import { FallenAngels } from '../sources/FallenAngels/FallenAngels';
@@ -64,13 +65,13 @@ describe("FallenAngels Tests", function () {
 	it("Testing search", async () => {
 		const testSearch = createSearchRequest({ title: "he" });
 		const search = await wrapper.searchRequest(source, testSearch, { page: 0 });
-		const result = search.results[0];
+		const data = search.results[0];
 
-		expect(result, "No response from server").to.exist;
-		expect(result.id, "No ID found for search query").to.be.not.empty;
-		expect(result.image, "No image found for search").to.be.not.empty;
-		expect(result.title, "No title").to.be.not.null;
-		expect(result.subtitleText, "No subtitle text").to.be.not.null;
+		expect(data, "No response from server").to.exist;
+		expect(data.id, "No ID found for search query").to.be.not.empty;
+		expect(data.image, "No image found for search").to.be.not.empty;
+		expect(data.title, "No title").to.be.not.null;
+		expect(data.subtitleText, "No subtitle text").to.be.not.null;
 	});
 
 	it("Testing Home-Page aquisition", async () => {
@@ -90,7 +91,13 @@ describe("FallenAngels Tests", function () {
 
 		expect(data.id, "No ID present").to.exist;
 		expect(data.image, "No image present").to.exist;
+        // Ensure that we can resolve the image since it can be generated and not scraped
+        const promises: Promise<void>[] = []
+        promises.push(axios.get(data.image).then((imageResult: { status: any; }) => {expect(imageResult.status).to.equal(200)}))
+        await Promise.all(promises)
 		expect(data.title.text, "No title present").to.exist;
+        expect(data.subtitleText?.text, "No title present").to.exist;
+        expect(data.subtitleText?.text, "No chapter number present").to.not.be.equal("Charpter ");
 	});
 
 	it("Testing home page results for CURRENTLY TRENDING titles", async () => {
@@ -104,7 +111,12 @@ describe("FallenAngels Tests", function () {
 
 		expect(data.id, "No ID present").to.exist;
 		expect(data.image, "No image present").to.exist;
+        // Ensure that we can resolve the image since it can be generated and not scraped
+        const promises: Promise<void>[] = []
+        promises.push(axios.get(data.image).then((imageResult: { status: any; }) => {expect(imageResult.status).to.equal(200)}))
+        await Promise.all(promises)
 		expect(data.title.text, "No title present").to.exist;
+        expect(data.subtitleText?.text, "No title present").to.exist;
 	});
 
 	it("Testing Notifications", async () => {

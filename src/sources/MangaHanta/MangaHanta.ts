@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory, SourceTag } from "../..";
 
-const MANGAHANTA_DOMAIN = "http://mangahanta.com";
-
 export const MangaHantaInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "MangaHanta",
@@ -11,7 +9,7 @@ export const MangaHantaInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: MANGAHANTA_DOMAIN,
+	websiteBaseURL: "http://mangahanta.com",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const MangaHantaInfo: SourceInfo = {
 };
 
 export class MangaHanta extends Mmrcms {
-	baseUrl: string = MANGAHANTA_DOMAIN;
+    name: string = MangaHantaInfo.name;
+	baseUrl: string = MangaHantaInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.TURKISH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Aksiyon" },
 		{ id: "2", name: "Macera" },

@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const NIKUSHIMI_DOMAIN = "https://azbivo.webd.pro";
-
 export const NikushimiInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Nikushimi",
@@ -11,7 +9,7 @@ export const NikushimiInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: NIKUSHIMI_DOMAIN,
+	websiteBaseURL: "https://azbivo.webd.pro",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const NikushimiInfo: SourceInfo = {
 };
 
 export class Nikushimi extends Mmrcms {
-	baseUrl: string = NIKUSHIMI_DOMAIN;
+    name: string = NikushimiInfo.name;
+	baseUrl: string = NikushimiInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.POLISH;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

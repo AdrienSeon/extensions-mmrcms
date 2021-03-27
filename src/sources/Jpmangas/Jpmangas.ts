@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const JPMANGAS_DOMAIN = "https://jpmangas.co";
-
 export const JpmangasInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Jpmangas",
@@ -11,7 +9,7 @@ export const JpmangasInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: JPMANGAS_DOMAIN,
+	websiteBaseURL: "https://jpmangas.co",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,7 +23,8 @@ export const JpmangasInfo: SourceInfo = {
 };
 
 export class Jpmangas extends Mmrcms {
-	baseUrl: string = JPMANGAS_DOMAIN;
+    name: string = JpmangasInfo.name;
+	baseUrl: string = JpmangasInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.FRENCH;
 	sourceTraversalPathName: string = "lecture-en-ligne";
 	sourceCategories: SourceCategory[] = [

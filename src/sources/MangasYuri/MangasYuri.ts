@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory } from "../..";
 
-const MANGASYURI_DOMAIN = "https://mangasyuri.net";
-
 export const MangasYuriInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Mangás Yuri",
@@ -11,7 +9,7 @@ export const MangasYuriInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: MANGASYURI_DOMAIN,
+	websiteBaseURL: "https://mangasyuri.net",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -25,9 +23,9 @@ export const MangasYuriInfo: SourceInfo = {
 };
 
 export class MangasYuri extends Mmrcms {
-	baseUrl: string = MANGASYURI_DOMAIN;
+    name: string = MangasYuriInfo.name;
+	baseUrl: string = MangasYuriInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.PORTUGUESE;
-	sourceTraversalPathName: string = "manga";
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Ação" },
 		{ id: "2", name: "Aventura" },
