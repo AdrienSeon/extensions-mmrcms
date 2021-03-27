@@ -24,7 +24,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "cheerio": "^1.0.0-rc.5",
-    "paperback-cli": "github:AdrienSeon/paperback-cli",
+    "paperback-cli": "https://github.com/AdrienSeon/paperback-cli.git",
     "paperback-extensions-common": "^2.1.18",
     "ts-mocha": "^7.0.0",
     "ts-node": "^7.0.1",
