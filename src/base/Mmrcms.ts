@@ -105,16 +105,7 @@ export abstract class Mmrcms extends Source {
     }
 
     async getTags(): Promise<TagSection[] | null> {
-        const request = createRequestObject({
-            url: `${this.baseUrl}/`,
-            method: "GET",
-            headers: this.constructHeaders({}),
-        });
-
-        const response = await this.requestManager.schedule(request, 1);
-        this.CloudFlareError(response.status);
-        const $ = this.cheerio.load(response.data);
-        return this.parser.parseTags($);
+        return this.parser.parseTags(this);
     }
 
     async searchRequest(query: SearchRequest, metadata: any): Promise<PagedResults> {
@@ -135,21 +126,18 @@ export abstract class Mmrcms extends Source {
     }
 
     async filterUpdatedManga(mangaUpdatesFoundCallback: (updates: MangaUpdates) => void, time: Date, ids: string[]): Promise<void> {
-        // If we're supplied a page that we should be on, set our internal reference to that page. Otherwise, we start from page 0.
-        let page: number = 0;
+        let page: number = 1;
         let loadNextPage = true;
         while (loadNextPage) {
             const request = createRequestObject({
-                url: `${this.baseUrl}/`,
+                url: `${this.baseUrl}/latest-release?page=${page}`,
                 method: "GET",
                 headers: this.constructHeaders({}),
             });
-
             const response = await this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
             const $ = this.cheerio.load(response.data);
-
-            let updatedManga = this.parser.filterUpdatedManga($, time, ids, this);
+            let updatedManga = this.latestIsInListFormat ? this.parser.filterUpdatedMangaList($, this, time, ids) : this.parser.filterUpdatedMangaGrid($, this, time, ids);
             loadNextPage = updatedManga.loadNextPage;
             if (loadNextPage) {
                 page++;
@@ -257,9 +245,7 @@ export abstract class Mmrcms extends Source {
             default:
                 return Promise.resolve(null);
         }
-
-        // TODO isLastPage
-
+        metadata = this.parser.isLastPage($, this) ? undefined : { page: page + 1 };
         return createPagedResults({
             results: mangaTiles,
             metadata,
@@ -272,28 +258,6 @@ export abstract class Mmrcms extends Source {
             method: "GET",
             headers: this.constructHeaders({}),
         });
-    }
-
-    /**
-     * Parses a time string from a Madara source into a Date object.
-     */
-    protected convertTime(timeAgo: string): Date {
-        let time: Date;
-        let trimmed: number = Number((/\d*/.exec(timeAgo) ?? [])[0]);
-        trimmed = trimmed == 0 && timeAgo.includes("a") ? 1 : trimmed;
-        if (timeAgo.includes("mins") || timeAgo.includes("minutes") || timeAgo.includes("minute")) {
-            time = new Date(Date.now() - trimmed * 60000);
-        } else if (timeAgo.includes("hours") || timeAgo.includes("hour")) {
-            time = new Date(Date.now() - trimmed * 3600000);
-        } else if (timeAgo.includes("days") || timeAgo.includes("day")) {
-            time = new Date(Date.now() - trimmed * 86400000);
-        } else if (timeAgo.includes("year") || timeAgo.includes("years")) {
-            time = new Date(Date.now() - trimmed * 31556952000);
-        } else {
-            time = new Date(timeAgo);
-        }
-
-        return time;
     }
 
     constructHeaders(headers: any, refererPath?: string): any {

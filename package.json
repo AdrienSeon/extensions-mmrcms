@@ -5,7 +5,7 @@
   "scripts": {
     "start": "tsc && node dist/api.js",
     "build": "tsc",
-    "test": "node_modules/.bin/mocha --timeout 300000 -r ts-node/register src/**/*.test.ts --grep 'Testing search'",
+    "test": "node_modules/.bin/mocha --timeout 300000 -r ts-node/register src/**/*.test.ts --grep 'Testing Notifications'",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "bundle": "paperback bundle --sourceslocation=sources",
     "serve": "paperback bundle --sourceslocation=sources && paperback serve -p 8000 --nobundle"

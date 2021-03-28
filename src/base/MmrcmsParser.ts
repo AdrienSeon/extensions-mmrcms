@@ -17,12 +17,7 @@ export class Parser {
         // Rating
         const rating: number = Number(($("#item-rating").attr("data-score") ?? "0").replace(/\s+|\n+/g, " ").trim());
         // Description
-        let desc: string = this.decodeHTMLEntity(
-            $(".row .well p")
-                .text()
-                .replace(/\s+|\n+/g, " ")
-                .trim()
-        );
+        let desc: string = this.decodeHTMLEntity($(".row .well p").text().replace(/\s+|\n+/g, " ").trim());
         let titles: string[] = [];
         let author: string = "";
         let artist: string = "";
@@ -31,89 +26,31 @@ export class Parser {
         const tags: string[] = [];
         for (const element of $(".row .dl-horizontal dt").toArray()) {
             // Titles
-            titles.push(
-                this.decodeHTMLEntity(
-                    $("h2.listmanga-header, h2.widget-title")
-                        .first()
-                        .text()
-                        .replace(/\s+|\n+/g, " ")
-                        .trim()
-                )
-            );
+            titles.push(this.decodeHTMLEntity($("h2.listmanga-header, h2.widget-title").first().text().replace(/\s+|\n+/g, " ").trim()));
             if (altTitesTranslation.includes($(element).text().trim().toLowerCase())) {
                 for (const title of $(element).next().text().split(",")) {
                     titles.push(this.decodeHTMLEntity(title.replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Author
-            if (authorTranslations.includes($(element).text().trim().toLowerCase()))
-                author = this.decodeHTMLEntity(
-                    $(element)
-                        .next()
-                        .text()
-                        .replace(/\s+|\n+/g, " ")
-                        .trim()
-                );
+            if (authorTranslations.includes($(element).text().trim().toLowerCase())) author = this.decodeHTMLEntity($(element).next().text().replace(/\s+|\n+/g, " ").trim());
             // Artist
-            if (artistTranslations.includes($(element).text().trim().toLowerCase()))
-                artist = this.decodeHTMLEntity(
-                    $(element)
-                        .next()
-                        .text()
-                        .replace(/\s+|\n+/g, " ")
-                        .trim()
-                );
+            if (artistTranslations.includes($(element).text().trim().toLowerCase())) artist = this.decodeHTMLEntity($(element).next().text().replace(/\s+|\n+/g, " ").trim());
             // Genres
             if (genreTranslations.includes($(element).text().trim().toLowerCase())) {
                 for (const genreElement of $("a", $(element).next()).toArray()) {
-                    genres.push(
-                        this.decodeHTMLEntity(
-                            $(genreElement)
-                                .text()
-                                .replace(/\s+|\n+/g, " ")
-                                .trim()
-                        )
-                    );
+                    genres.push(this.decodeHTMLEntity($(genreElement).text().replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Tags
             if (tagsTranslations.includes($(element).text().trim().toLowerCase())) {
                 for (const tagElement of $("a", $(element).next()).toArray()) {
-                    tags.push(
-                        this.decodeHTMLEntity(
-                            $(tagElement)
-                                .text()
-                                .replace(/\s+|\n+/g, " ")
-                                .trim()
-                        )
-                    );
+                    tags.push(this.decodeHTMLEntity($(tagElement).text().replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Status
-            if (
-                statusTranslations.includes($(element).text().trim().toLowerCase()) &&
-                statusOngoingTranslations.includes(
-                    $(element)
-                        .next()
-                        .text()
-                        .replace(/\s+|\n+/g, " ")
-                        .trim()
-                        .toLowerCase()
-                )
-            )
-                status = MangaStatus.ONGOING;
-            if (
-                statusTranslations.includes($(element).text().trim().toLowerCase()) &&
-                statusCompleteTranslations.includes(
-                    $(element)
-                        .next()
-                        .text()
-                        .replace(/\s+|\n+/g, " ")
-                        .trim()
-                        .toLowerCase()
-                )
-            )
-                status = MangaStatus.COMPLETED;
+            if (statusTranslations.includes($(element).text().trim().toLowerCase()) && statusOngoingTranslations.includes($(element).next().text().replace(/\s+|\n+/g, " ").trim().toLowerCase())) status = MangaStatus.ONGOING;
+            if (statusTranslations.includes($(element).text().trim().toLowerCase()) &&statusCompleteTranslations.includes($(element).next().text().replace(/\s+|\n+/g, " ").trim().toLowerCase())) status = MangaStatus.COMPLETED;
         }
         // When details are in a .panel instead of .row (spanish sources)
         for (const element of $("div.panel span.list-group-item, div.panel div.panel-body h3").toArray()) {
@@ -131,50 +68,18 @@ export class Parser {
             // Genres
             if (genreTranslations.includes(metadata[0].trim().toLowerCase())) {
                 for (const genreElement of $("a", $(element)).toArray()) {
-                    genres.push(
-                        this.decodeHTMLEntity(
-                            $(genreElement)
-                                .text()
-                                .replace(/\s+|\n+/g, " ")
-                                .trim()
-                        )
-                    );
+                    genres.push(this.decodeHTMLEntity($(genreElement).text().replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Tags
             if (tagsTranslations.includes(metadata[0].trim().toLowerCase())) {
                 for (const tagElement of $("a", $(element)).toArray()) {
-                    tags.push(
-                        this.decodeHTMLEntity(
-                            $(tagElement)
-                                .text()
-                                .replace(/\s+|\n+/g, " ")
-                                .trim()
-                        )
-                    );
+                    tags.push(this.decodeHTMLEntity($(tagElement).text().replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Status
-            if (
-                statusTranslations.includes(metadata[0].trim().toLowerCase()) &&
-                statusOngoingTranslations.includes(
-                    metadata[1]
-                        .replace(/\s+|\n+/g, " ")
-                        .trim()
-                        .toLowerCase()
-                )
-            )
-                status = MangaStatus.ONGOING;
-            if (
-                statusTranslations.includes(metadata[0].trim().toLowerCase()) &&
-                statusCompleteTranslations.includes(
-                    metadata[1]
-                        .replace(/\s+|\n+/g, " ")
-                        .trim()
-                        .toLowerCase()
-                )
-            )
-                status = MangaStatus.COMPLETED;
+            if (statusTranslations.includes(metadata[0].trim().toLowerCase()) && statusOngoingTranslations.includes(metadata[1].replace(/\s+|\n+/g, " ").trim().toLowerCase())) status = MangaStatus.ONGOING;
+            if (statusTranslations.includes(metadata[0].trim().toLowerCase()) && statusCompleteTranslations.includes(metadata[1].replace(/\s+|\n+/g, " ").trim().toLowerCase())) status = MangaStatus.COMPLETED;
             // Description
             if (descriptionTranslations.includes($("b", $(element)).text().trim().toLowerCase())) desc = this.decodeHTMLEntity($(element).text().trim());
         }
@@ -214,20 +119,9 @@ export class Parser {
                 const chapterNode = source.name === "Mangas.in" ? $("i .capitulo_enlace", $(element)).first() : $("[class^=chapter-title-rtl] a", $(element)).first();
                 const url = $(chapterNode).first().attr("href") ?? "";
                 const chapId: string = url.split("/").pop() ?? "";
-                const releaseDate: Date = new Date(
-                    Date.parse(
-                        $("[class^=date-chapter-title-rtl]", $(element))
-                            .text()
-                            .replace(/\s+|\n+/g, " ")
-                            .trim()
-                    )
-                );
+                const releaseDate: Date = new Date(Date.parse($("[class^=date-chapter-title-rtl]", $(element)).text().replace(/\s+|\n+/g, " ").trim()));
                 const chapNum: number = chapId.match(/\d+\.?\d+/g) ? Number(chapId.match(/\d+\.?\d+/g)![0]) : 0;
-                const chapName: string = $("em", $(chapterNode).parent())
-                    .first()
-                    .text()
-                    .replace(/\s+|\n+/g, " ")
-                    .trim();
+                const chapName: string = $("em", $(chapterNode).parent()).first().text().replace(/\s+|\n+/g, " ").trim();
                 chapters.push(
                     createChapter({
                         id: chapId,
@@ -244,15 +138,7 @@ export class Parser {
                 if ($("td", $(element)).text() !== "") {
                     const url = $("td a", $(element)).first().attr("href") ?? "";
                     const chapId: string = url.split("/").pop() ?? "";
-                    const releaseDate: Date = new Date(
-                        Date.parse(
-                            $(".glyphicon-time", $(element))
-                                .parent()
-                                .text()
-                                .replace(/\s+|\n+/g, " ")
-                                .trim()
-                        )
-                    );
+                    const releaseDate: Date = new Date(Date.parse($(".glyphicon-time", $(element)).parent().text().replace(/\s+|\n+/g, " ").trim()));
                     const chapNum: number = chapId.match(/\d+\.?\d+/g) ? Number(chapId.match(/\d+\.?\d+/g)![0]) : 0;
                     const chapName: string = "Chapter " + chapNum;
                     chapters.push(
@@ -289,25 +175,24 @@ export class Parser {
         });
     }
 
-    parseTags($: CheerioSelector): TagSection[] {
-        let genres: Tag[] = [];
-
-        for (let obj of $(".menu-item-object-wp-manga-genre a", $(".second-menu")).toArray()) {
-            let label = $(obj).text().trim();
-            let id = $(obj).attr("href")?.split("/")[4] ?? label;
-            genres.push(createTag({ label: label, id: id }));
+    parseTags(source: any): TagSection[] {
+        const tags: Tag[] = [];
+        for (const category of source.sourceCategories) {
+            tags.push(createTag({ label: category.name, id: category.id }));
         }
-
-        return [createTagSection({ id: "0", label: "genres", tags: genres })];
+        for (const tag of source.sourceTags) {
+            tags.push(createTag({ label: tag.name, id: tag.id }));
+        }
+        return [createTagSection({ id: "0", label: "Tags", tags })];
     }
 
     parseSearchResults(data: any, source: any): MangaTile[] {
         const mangaTiles: MangaTile[] = [];
         const results = source.name === "Mangas.in" ? data : data.suggestions;
         for (const element of results) {
-            let id = element.data;
-            let title = element.value;
-            let image = encodeURI(`${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`);
+            const id = element.data;
+            const title = element.value;
+            const image = encodeURI(`${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`);
             mangaTiles.push(
                 createMangaTile({
                     id: id,
@@ -319,29 +204,21 @@ export class Parser {
         return mangaTiles;
     }
 
-    filterUpdatedManga($: CheerioSelector, time: Date, ids: string[], source: any): { updates: string[]; loadNextPage: boolean } {
+    filterUpdatedMangaList($: CheerioSelector, source: any, time: Date, ids: string[]): { updates: string[]; loadNextPage: boolean } {
         let passedReferenceTime = false;
         let updatedManga: string[] = [];
-
-        for (let obj of $("div.page-item-detail").toArray()) {
-            let id = $("a", $("h3.h5", obj)).attr("href")?.replace(`${source.baseUrl}/${source.sourceTraversalPathName}/`, "").replace(/\/$/, "") ?? "";
-            let mangaTime: Date;
-            if ($(".c-new-tag a", obj).length > 0) {
-                // Use blinking red NEW tag
-                mangaTime = source.convertTime($(".c-new-tag a", obj).attr("title") ?? "");
-            } else {
-                // Use span
-                mangaTime = source.convertTime($("span", $(".chapter-item", obj).first()).last().text() ?? "");
-            }
+        const context: Cheerio = $("div.mangalist");
+        for (const element of $("div.manga-item", context).toArray()) {
+            const id = ($(source.latestListSelector, $(element)).attr("href") ?? "").split("/").pop() ?? "";
+            let mangaTime = this.convertTime($("[style=\"direction: ltr;\"]", $(element)).text().replace(/\s+|\n+/g, " ").trim());
             passedReferenceTime = mangaTime <= time;
             if (!passedReferenceTime) {
                 if (ids.includes(id)) {
                     updatedManga.push(id);
                 }
-            } else break;
-
+            }
             if (typeof id === "undefined") {
-                throw `Failed to parse homepage sections for ${source.baseUrl}/${source.homePage}/`;
+                throw `Failed to parse homepage sections for ${source.baseUrl}`;
             }
         }
         if (!passedReferenceTime) {
@@ -351,6 +228,29 @@ export class Parser {
         }
     }
 
+    filterUpdatedMangaGrid($: CheerioSelector, source: any, time: Date, ids: string[]): { updates: string[]; loadNextPage: boolean } {
+        let passedReferenceTime = false;
+        let updatedManga: string[] = [];
+        const context: Cheerio = $("div.mangalist, div.grid-manga, div#destacados");
+        for (const element of $("div.manga-item", context).toArray()) {
+            const id = ($("a.chart-title:first-of-type, .caption h3 a", $(element)).attr("href") ?? "").split("/").pop() ?? "";
+            let mangaTime = this.convertTime($("[style=\"direction: ltr;\"]", $(element)).text().replace(/\s+|\n+/g, " ").trim());
+            passedReferenceTime = mangaTime <= time;
+            if (!passedReferenceTime) {
+                if (ids.includes(id)) {
+                    updatedManga.push(id);
+                }
+            }
+            if (typeof id === "undefined") {
+                throw `Failed to parse homepage sections for ${source.baseUrl}`;
+            }
+        }
+        if (!passedReferenceTime) {
+            return { updates: updatedManga, loadNextPage: true };
+        } else {
+            return { updates: updatedManga, loadNextPage: false };
+        }
+    }
     parseLatestRelease($: CheerioStatic, source: any): MangaTile[] {
         const mangaTiles: MangaTile[] = [];
         const collectedIds: string[] = [];
@@ -367,13 +267,7 @@ export class Parser {
             id = ($(source.latestListSelector, $(element)).attr("href") ?? "").split("/").pop() ?? "";
             image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
             title = $(source.latestListSelector, $(element)).text().trim();
-            chapter =
-                "Chapter " +
-                ($("h6.events-subtitle a", $(element))
-                    .text()
-                    .replace(/\s+/g, " ")
-                    .trim()
-                    .match(/\d+\.?\d+/g) ?? [""])[0];
+            chapter = "Chapter " + ($("h6.events-subtitle a", $(element)).text().replace(/\s+/g, " ").trim().match(/\d+\.?\d+/g) ?? [""])[0];
             if (!collectedIds.includes(id)) {
                 mangaTiles.push(
                     createMangaTile({
@@ -399,13 +293,7 @@ export class Parser {
             id = ($("a.chart-title:first-of-type, .caption h3 a", $(element)).attr("href") ?? "").split("/").pop() ?? "";
             image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
             title = $("a.chart-title:first-of-type, .caption h3 a", $(element)).text().trim();
-            chapter =
-                "Chapter " +
-                ($("div.media-body a:last-of-type, .caption p", $(element))
-                    .text()
-                    .replace(/\s+/g, " ")
-                    .trim()
-                    .match(/\d+\.?\d+/g) ?? [""])[0];
+            chapter = "Chapter " + ($("div.media-body a:last-of-type, .caption p", $(element)).text().replace(/\s+/g, " ").trim().match(/\d+\.?\d+/g) ?? [""])[0];
             if (!collectedIds.includes(id)) {
                 mangaTiles.push(
                     createMangaTile({
@@ -483,7 +371,10 @@ export class Parser {
 
     // UTILITY METHODS
 
-    // Chapter sorting
+    isLastPage = ($: CheerioSelector, source: any): boolean => {
+        return ($("ul.pagination").last().attr("class") === "disabled") ? true : false;
+    }
+
     sortChapters(chapters: Chapter[]): Chapter[] {
         let sortedChapters = chapters.filter((obj, index, arr) => arr.map((mapObj) => mapObj.id).indexOf(obj.id) === index);
         sortedChapters.sort((a, b) => (a.chapNum - b.chapNum ? -1 : 1));
@@ -506,5 +397,17 @@ export class Parser {
         if (url.endsWith("no-image.png") === true) return encodeURI(`${source.baseUrl}/uploads/manga/${mangaId}/cover/cover_250x350.jpg`);
         if (url.startsWith("//")) return encodeURI(source.baseUrl.split("//")[0] + url); // Eg. Fallen Angels
         return encodeURI(url);
+    }
+
+    protected convertTime(timeAgo: string): Date {
+        if (timeAgo.toLowerCase().includes("today") || timeAgo.toLowerCase().includes("hoy") || timeAgo.toLowerCase().includes("aujourd'hui")) return new Date(new Date().setHours(0,0,0,0));
+        if (timeAgo.toLowerCase().includes("yesterday") || timeAgo.toLowerCase().includes("ayer") || timeAgo.toLowerCase().includes("hier")) return new Date(Date.now() - 1 * 86400000);
+        let trimmed: number = Number((/\d*/.exec(timeAgo) ?? [])[0]);
+        trimmed = (trimmed == 0 && timeAgo.includes('a')) ? 1 : trimmed;
+        if (timeAgo.includes('mins') || timeAgo.includes('minutes') || timeAgo.includes('minute')) return new Date(Date.now() - trimmed * 60000);
+        if (timeAgo.includes('hours') || timeAgo.includes('hour')) return new Date(Date.now() - trimmed * 3600000);
+        if (timeAgo.includes('days') || timeAgo.includes('day')) return new Date(Date.now() - trimmed * 86400000);
+        if (timeAgo.includes('year') || timeAgo.includes('years')) return new Date(Date.now() - trimmed * 31556952000);
+        return new Date(timeAgo)
     }
 }
