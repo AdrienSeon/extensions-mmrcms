@@ -19,7 +19,7 @@ describe("MangasYuri Tests", function () {
 	 * Try to choose a manga which is updated frequently, so that the historical checking test can
 	 * return proper results, as it is limited to searching 30 days back due to extremely long processing times otherwise.
 	 */
-	const mangaId = "tamen-de-gushi-tan-jiu"; // ! website not updated anymore
+	const mangaId = "vampeerz-my-peer-vampires"; // ! website not updated anymore
 
 	it("Retrieve Manga Details", async () => {
 		const details = await wrapper.getMangaDetails(source, mangaId);
@@ -30,6 +30,10 @@ describe("MangasYuri Tests", function () {
 
 		expect(data.id, "Missing ID").to.be.not.empty;
 		expect(data.image, "Missing Image").to.be.not.empty;
+        // Ensure that we can resolve the image since it can be generated and not scraped
+        const promises: Promise<void>[] = []
+        promises.push(axios.get(data.image).then((imageResult: { status: any; }) => {expect(imageResult.status).to.equal(200)}))
+        await Promise.all(promises)
 		expect(data.status, "Missing Status").to.exist;
 		expect(data.author, "Missing Author").to.be.not.empty;
 		expect(data.desc, "Missing Description").to.be.not.empty;

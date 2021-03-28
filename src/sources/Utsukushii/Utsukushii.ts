@@ -1,6 +1,5 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
-import { Mmrcms } from "../..";
-import { SourceCategory } from "../../models/SourceCategory/SourceCategory";
+import { Mmrcms, SourceCategory } from "../..";
 
 export const UtsukushiiInfo: SourceInfo = {
 	version: "1.0.0",

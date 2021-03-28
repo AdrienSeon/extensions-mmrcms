@@ -57,7 +57,7 @@ describe("Jpmangas Tests", function () {
 	it("Get Chapter Details", async () => {
 		const chapters = await wrapper.getChapters(source, mangaId);
 		const data = await wrapper.getChapterDetails(source, mangaId, chapters[0].id);
-
+        
 		expect(data, "No server response").to.exist;
 		expect(data, "Empty server response").to.not.be.empty;
 		expect(data.id, "Missing ID").to.be.not.empty;

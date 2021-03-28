@@ -1,8 +1,6 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
 import { Mmrcms, SourceCategory, SourceTag } from "../..";
 
-const ZAHARD_DOMAIN = "https://zahard.top";
-
 export const ZahardInfo: SourceInfo = {
 	version: "1.0.0",
 	name: "Zahard",
@@ -11,7 +9,7 @@ export const ZahardInfo: SourceInfo = {
 	authorWebsite: "https://github.com/adrienseon",
 	icon: "icon.png",
 	hentaiSource: false,
-	websiteBaseURL: ZAHARD_DOMAIN,
+	websiteBaseURL: "https://zahard.top",
 	sourceTags: [
 		{
 			text: "Notifications",
@@ -22,7 +20,7 @@ export const ZahardInfo: SourceInfo = {
 
 export class Zahard extends Mmrcms {
     name: string = ZahardInfo.name;
-	baseUrl: string = ZAHARD_DOMAIN;
+	baseUrl: string = ZahardInfo.websiteBaseURL;
 	languageCode: LanguageCode = LanguageCode.ENGLISH;
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },

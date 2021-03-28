@@ -25,5 +25,5 @@ export const OnmaInfo: SourceInfo = {
 export class Onma extends Mmrcms {
     name: string = OnmaInfo.name;
 	baseUrl: string = OnmaInfo.websiteBaseURL;
-	languageCode: LanguageCode = LanguageCode.UNKNOWN; // ! ARABIC enum not implemented
+    languageCode: LanguageCode = LanguageCode.UNKNOWN; // ! ARABIC enum not implemented
 }

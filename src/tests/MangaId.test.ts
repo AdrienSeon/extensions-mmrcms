@@ -30,6 +30,10 @@ describe("MangaId Tests", function () {
 
 		expect(data.id, "Missing ID").to.be.not.empty;
 		expect(data.image, "Missing Image").to.be.not.empty;
+        // Ensure that we can resolve the image since it can be generated and not scraped
+        const promises: Promise<void>[] = []
+        promises.push(axios.get(data.image).then((imageResult: { status: any; }) => {expect(imageResult.status).to.equal(200)}))
+        await Promise.all(promises)
 		expect(data.status, "Missing Status").to.exist;
 		expect(data.author, "Missing Author").to.be.not.empty;
 		expect(data.desc, "Missing Description").to.be.not.empty;

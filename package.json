@@ -5,7 +5,7 @@
   "scripts": {
     "start": "tsc && node dist/api.js",
     "build": "tsc",
-    "test": "node_modules/.bin/mocha --timeout 300000 -r ts-node/register src/**/*.test.ts --grep 'Testing home page results for RECENTLY UPDATED titles'",
+    "test": "node_modules/.bin/mocha --timeout 300000 -r ts-node/register src/**/*.test.ts --grep 'Testing search'",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "bundle": "paperback bundle --sourceslocation=sources",
     "serve": "paperback bundle --sourceslocation=sources && paperback serve -p 8000 --nobundle"
@@ -24,7 +24,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "cheerio": "^1.0.0-rc.5",
-    "paperback-cli": "https://github.com/AdrienSeon/paperback-cli.git",
+    "paperback-cli": "github:AdrienSeon/paperback-cli",
     "paperback-extensions-common": "^2.1.18",
     "ts-mocha": "^7.0.0",
     "ts-node": "^7.0.1",
@@ -35,10 +35,13 @@
     "@types/cheerio": "^0.22.21",
     "@types/mocha": "^7.0.2",
     "@types/node": "^14.14.37",
-    "@typescript-eslint/eslint-plugin": "^4.14.1",
-    "eslint": "^7.18.0",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.2.0",
+    "eslint-plugin-import": "^2.22.1",
     "mocha": "^7.2.0",
     "nyc": "^15.1.0",
     "typedoc": "^0.17.6"

@@ -1,11 +1,13 @@
 {
-    "mocha.files.glob": "src/**/*.test.ts",
-    "mocha.requires": [
-        "ts-node/register"
-    ],
-    "mocha.options": {
-        "timeout": 300000,
-        "trace-warnings": true,
-        "colors": true,
-    },
+	"mocha.files.glob": "src/**/*.test.ts",
+	"mocha.requires": ["ts-node/register"],
+	"mocha.options": {
+		"timeout": 300000,
+		"trace-warnings": true,
+		"colors": true
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"eslint.validate": ["javascript"]
 }
