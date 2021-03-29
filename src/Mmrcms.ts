@@ -1,6 +1,6 @@
 import { Chapter,ChapterDetails,HomeSection,LanguageCode,Manga,MangaTile,MangaUpdates,PagedResults, RequestHeaders,SearchRequest,Source, TagSection } from "paperback-extensions-common"
 import { Parser } from './MmrcmsParser';
-import { SourceCategory, SourceTag, DateFormat } from "../models";
+import { SourceCategory, SourceTag, DateFormat } from "./models";
 
 export abstract class Mmrcms extends Source {
     /**

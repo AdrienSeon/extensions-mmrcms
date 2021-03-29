@@ -1,2 +1,2 @@
-export * from "./base"
+export * from "./Mmrcms";
 export * from "./models"
