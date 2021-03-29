@@ -124,7 +124,7 @@ describe("FallenAngels Tests", function () {
 	});
 
 	it("Testing Notifications", async () => {
-		const updates = await wrapper.filterUpdatedManga(source, new Date("2021-03-14"), [mangaId]);
+		const updates = await wrapper.filterUpdatedManga(source, new Date("2021-03-26"), [mangaId]);
 
 		expect(updates, "No server response").to.exist;
 		expect(updates, "Empty server response").to.not.be.empty;

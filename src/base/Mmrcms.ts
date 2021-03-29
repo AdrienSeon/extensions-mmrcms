@@ -80,7 +80,7 @@ export abstract class Mmrcms extends Source {
         this.CloudFlareError(response.status);
         const $ = this.cheerio.load(response.data);
 
-        return this.parser.parseMangaDetails($, this, mangaId);
+        return this.parser.parseMangaDetails($, mangaId, this);
     }
 
     async getChapters(mangaId: string): Promise<Chapter[]> {
@@ -93,7 +93,7 @@ export abstract class Mmrcms extends Source {
         this.CloudFlareError(response.status);
         const $ = this.cheerio.load(response.data);
 
-        return this.parser.parseChapterList($, this, mangaId);
+        return this.parser.parseChapterList($, mangaId, this);
     }
 
     async getChapterDetails(mangaId: string, chapterId: string): Promise<ChapterDetails> {
@@ -106,7 +106,7 @@ export abstract class Mmrcms extends Source {
         this.CloudFlareError(response.status);
         const $ = this.cheerio.load(response.data);
 
-        return this.parser.parseChapterDetails($, this, mangaId, chapterId);
+        return this.parser.parseChapterDetails($, mangaId, chapterId, this);
     }
 
     async getTags(): Promise<TagSection[] | null> {
@@ -122,8 +122,8 @@ export abstract class Mmrcms extends Source {
         });
         const response = await this.requestManager.schedule(request, 1);
         this.CloudFlareError(response.status);
-        const mangaTiles = this.parser.parseSearchResults(response.data, this);
-
+        const json: any = response.data;
+        const mangaTiles = this.parser.parseSearchResults(json, query, this);
         return createPagedResults({
             results: mangaTiles,
             metadata: undefined,
@@ -131,6 +131,7 @@ export abstract class Mmrcms extends Source {
     }
 
     async filterUpdatedManga(mangaUpdatesFoundCallback: (updates: MangaUpdates) => void, time: Date, ids: string[]): Promise<void> {
+        const allMangas = new Set(ids);
         let page: number = 1;
         let loadNextPage = true;
         while (loadNextPage) {
@@ -142,17 +143,16 @@ export abstract class Mmrcms extends Source {
             const response = await this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
             const $ = this.cheerio.load(response.data);
-            let updatedManga = this.latestIsInListFormat ? this.parser.filterUpdatedMangaList($, this, time, ids) : this.parser.filterUpdatedMangaGrid($, this, time, ids);
-            loadNextPage = updatedManga.loadNextPage;
+            const updatedManga = this.latestIsInListFormat ? this.parser.filterUpdatedMangaList($, time, allMangas, this) : this.parser.filterUpdatedMangaGrid($, time, allMangas, this);
+            loadNextPage = updatedManga.hasMore;
             if (loadNextPage) {
                 page++;
             }
             if (updatedManga.updates.length > 0) {
-                mangaUpdatesFoundCallback(
-                    createMangaUpdates({
-                        ids: updatedManga.updates,
-                    })
-                );
+                // If we found updates on this page, notify the app
+                // This is needed so that the app can save the updates
+                // in case the background job is killed by iOS
+                mangaUpdatesFoundCallback(createMangaUpdates({ ids: updatedManga.updates }));
             }
         }
     }

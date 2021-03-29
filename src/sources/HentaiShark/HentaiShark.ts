@@ -25,7 +25,12 @@ export const HentaiSharkInfo: SourceInfo = {
 export class HentaiShark extends Mmrcms {
     name: string = HentaiSharkInfo.name;
     baseUrl: string = HentaiSharkInfo.websiteBaseURL;
-    languageCode: LanguageCode = LanguageCode.UNKNOWN;
+    languageCode: LanguageCode = LanguageCode.ENGLISH;
+    dateFormat: DateFormat = {
+        format: "DD/MM/YYYY",
+        todayTranslation: "today",
+        yesterdayTranslation: "yesterday",
+    };
     sourceCategories: SourceCategory[] = [
         { id: "1", name: "Doujinshi" },
         { id: "2", name: "Manga" },
