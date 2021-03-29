@@ -1,5 +1,5 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
-import { Mmrcms } from "../..";
+import { Mmrcms, DateFormat } from "../..";
 
 export const OpVfInfo: SourceInfo = {
 	version: "1.0.0",
@@ -28,6 +28,11 @@ export const OpVfInfo: SourceInfo = {
 
 export class OpVf extends Mmrcms {
     name: string = OpVfInfo.name;
-	baseUrl: string = OpVfInfo.websiteBaseURL;
-	languageCode: LanguageCode = LanguageCode.FRENCH;
+    baseUrl: string = OpVfInfo.websiteBaseURL;
+    languageCode: LanguageCode = LanguageCode.FRENCH;
+    dateFormat: DateFormat = {
+        format: "DD/MM/YYYY",
+        todayTranslation: "aujourd'hui",
+        yesterdayTranslation: "hier",
+    };
 }

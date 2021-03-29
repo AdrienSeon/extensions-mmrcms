@@ -176,14 +176,18 @@ export class Parser {
     }
 
     parseTags(source: any): TagSection[] {
-        const tags: Tag[] = [];
+        const genresTags: Tag[] = [];
+        const tagsTags: Tag[] = [];
         for (const category of source.sourceCategories) {
-            tags.push(createTag({ label: category.name, id: category.id }));
+            genresTags.push(createTag({ label: category.name, id: category.id }));
         }
         for (const tag of source.sourceTags) {
-            tags.push(createTag({ label: tag.name, id: tag.id }));
+            tagsTags.push(createTag({ label: tag.name, id: tag.id }));
         }
-        return [createTagSection({ id: "0", label: "Tags", tags })];
+        return [
+            createTagSection({ id: "genres", label: "Genres", tags: genresTags }),
+            createTagSection({ id: "tags", label: "Tags", tags: tagsTags })
+        ];
     }
 
     parseSearchResults(data: any, source: any): MangaTile[] {
@@ -257,7 +261,7 @@ export class Parser {
         return source.latestIsInListFormat ? this.parseLatestList($, source, collectedIds, mangaTiles) : this.parseLatestGrid($, source, collectedIds, mangaTiles);
     }
 
-    private parseLatestList($: CheerioStatic, source: any, collectedIds: string[], mangaTiles: MangaTile[]) {
+    private parseLatestList($: CheerioStatic, collectedIds: string[], mangaTiles: MangaTile[], source: any) {
         const context: Cheerio = $("div.mangalist");
         let id: string = "";
         let image: string = "";
@@ -283,7 +287,7 @@ export class Parser {
         return mangaTiles;
     }
 
-    private parseLatestGrid($: CheerioStatic, source: any, collectedIds: string[], mangaTiles: MangaTile[]) {
+    private parseLatestGrid($: CheerioStatic, collectedIds: string[], mangaTiles: MangaTile[], source: any) {
         const context: Cheerio = $("div.mangalist, div.grid-manga, div#destacados");
         let id: string = "";
         let image: string = "";
@@ -371,7 +375,7 @@ export class Parser {
 
     // UTILITY METHODS
 
-    isLastPage = ($: CheerioSelector, source: any): boolean => {
+    isLastPage = ($: CheerioSelector): boolean => {
         return ($("ul.pagination").last().attr("class") === "disabled") ? true : false;
     }
 
@@ -399,9 +403,9 @@ export class Parser {
         return encodeURI(url);
     }
 
-    protected convertTime(timeAgo: string): Date {
-        if (timeAgo.toLowerCase().includes("today") || timeAgo.toLowerCase().includes("hoy") || timeAgo.toLowerCase().includes("aujourd'hui")) return new Date(new Date().setHours(0,0,0,0));
-        if (timeAgo.toLowerCase().includes("yesterday") || timeAgo.toLowerCase().includes("ayer") || timeAgo.toLowerCase().includes("hier")) return new Date(Date.now() - 1 * 86400000);
+    protected convertTime(timeAgo: string, source: any): Date {
+        if (timeAgo.toLowerCase().includes(source?)) return new Date(new Date().setHours(0,0,0,0));
+        if (timeAgo.toLowerCase().includes("yesterday")) return new Date(Date.now() - 1 * 86400000);
         let trimmed: number = Number((/\d*/.exec(timeAgo) ?? [])[0]);
         trimmed = (trimmed == 0 && timeAgo.includes('a')) ? 1 : trimmed;
         if (timeAgo.includes('mins') || timeAgo.includes('minutes') || timeAgo.includes('minute')) return new Date(Date.now() - trimmed * 60000);

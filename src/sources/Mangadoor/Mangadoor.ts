@@ -1,5 +1,5 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
-import { Mmrcms } from "../..";
+import { Mmrcms, DateFormat } from "../..";
 
 export const MangadoorInfo: SourceInfo = {
 	version: "1.0.0",
@@ -28,6 +28,11 @@ export const MangadoorInfo: SourceInfo = {
 
 export class Mangadoor extends Mmrcms {
     name: string = MangadoorInfo.name;
-	baseUrl: string = MangadoorInfo.websiteBaseURL;
-	languageCode: LanguageCode = LanguageCode.SPANISH;
+    baseUrl: string = MangadoorInfo.websiteBaseURL;
+    languageCode: LanguageCode = LanguageCode.SPANISH;
+    dateFormat: DateFormat = {
+        format: "DD/MM/YYYY",
+        todayTranslation: "hoy",
+        yesterdayTranslation: "ayer",
+    };
 }

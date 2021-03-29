@@ -1,5 +1,5 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
-import { Mmrcms, SourceCategory } from "../..";
+import { Mmrcms, SourceCategory, DateFormat } from "../..";
 
 export const HentaiSharkInfo: SourceInfo = {
 	version: "1.0.0",
@@ -24,15 +24,15 @@ export const HentaiSharkInfo: SourceInfo = {
 
 export class HentaiShark extends Mmrcms {
     name: string = HentaiSharkInfo.name;
-	baseUrl: string = HentaiSharkInfo.websiteBaseURL;
-	languageCode: LanguageCode = LanguageCode.UNKNOWN;
-	sourceCategories: SourceCategory[] = [
-		{ id: "1", name: "Doujinshi" },
-		{ id: "2", name: "Manga" },
-		{ id: "3", name: "Western" },
-		{ id: "4", name: "non-h" },
-		{ id: "5", name: "imageset" },
-		{ id: "6", name: "artistcg" },
-		{ id: "7", name: "misc" },
-	];
+    baseUrl: string = HentaiSharkInfo.websiteBaseURL;
+    languageCode: LanguageCode = LanguageCode.UNKNOWN;
+    sourceCategories: SourceCategory[] = [
+        { id: "1", name: "Doujinshi" },
+        { id: "2", name: "Manga" },
+        { id: "3", name: "Western" },
+        { id: "4", name: "non-h" },
+        { id: "5", name: "imageset" },
+        { id: "6", name: "artistcg" },
+        { id: "7", name: "misc" },
+    ];
 }

@@ -1,5 +1,5 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
-import { Mmrcms, SourceCategory } from "../..";
+import { Mmrcms, SourceCategory, DateFormat } from "../..";
 
 export const MangasInInfo: SourceInfo = {
 	version: "1.0.0",
@@ -26,6 +26,11 @@ export class MangasIn extends Mmrcms {
     name: string = MangasInInfo.name;
     baseUrl: string = MangasInInfo.websiteBaseURL;
     languageCode: LanguageCode = LanguageCode.SPANISH;
+    dateFormat: DateFormat = {
+        format: "DD/MM/YYYY",
+        todayTranslation: "hoy",
+        yesterdayTranslation: "ayer",
+    };
     sourceSearchUrl: string = "/search?q=";
     latestListSelector: string = "a.fa-info-circle + a";
     sourceCategories: SourceCategory[] = [

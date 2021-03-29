@@ -1,5 +1,5 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
-import { Mmrcms, SourceCategory } from "../..";
+import { Mmrcms, SourceCategory, DateFormat } from "../..";
 
 export const FallenAngelsInfo: SourceInfo = {
 	version: "1.0.0",
@@ -21,7 +21,12 @@ export const FallenAngelsInfo: SourceInfo = {
 export class FallenAngels extends Mmrcms {
     name: string = FallenAngelsInfo.name;
 	baseUrl: string = FallenAngelsInfo.websiteBaseURL;
-	languageCode: LanguageCode = LanguageCode.ENGLISH;
+    languageCode: LanguageCode = LanguageCode.ENGLISH;
+    dateFormat: DateFormat = {
+        format: "DD/MM/YYYY",
+        todayTranslation: "today",
+        yesterdayTranslation: "yesterday",
+    }
 	sourceCategories: SourceCategory[] = [
 		{ id: "1", name: "Action" },
 		{ id: "2", name: "Adventure" },

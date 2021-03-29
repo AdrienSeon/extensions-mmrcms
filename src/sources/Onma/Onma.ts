@@ -1,5 +1,5 @@
 import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
-import { Mmrcms } from "../..";
+import { Mmrcms, DateFormat } from "../..";
 
 export const OnmaInfo: SourceInfo = {
 	version: "1.0.0",
@@ -24,6 +24,11 @@ export const OnmaInfo: SourceInfo = {
 
 export class Onma extends Mmrcms {
     name: string = OnmaInfo.name;
-	baseUrl: string = OnmaInfo.websiteBaseURL;
+    baseUrl: string = OnmaInfo.websiteBaseURL;
     languageCode: LanguageCode = LanguageCode.UNKNOWN; // ! ARABIC enum not implemented
+    dateFormat: DateFormat = {
+        format: "DD/MM/YYYY",
+        todayTranslation: "اليوم",
+        yesterdayTranslation: "في الامس",
+    };
 }

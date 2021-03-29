@@ -1,6 +1,6 @@
 import { Chapter,ChapterDetails,HomeSection,LanguageCode,Manga,MangaTile,MangaUpdates,PagedResults, RequestHeaders,SearchRequest,Source, TagSection } from "paperback-extensions-common"
 import { Parser } from './MmrcmsParser';
-import { SourceCategory, SourceTag } from "../models";
+import { SourceCategory, SourceTag, DateFormat } from "../models";
 
 export abstract class Mmrcms extends Source {
     /**
@@ -17,6 +17,11 @@ export abstract class Mmrcms extends Source {
      * The language code which this mMRCMS source supports.
      */
     abstract languageCode: LanguageCode;
+
+    /**
+     * The date format and days translation which this mMRCMS source uses.
+     */
+    abstract dateFormat: DateFormat;
 
     /**
      * Search endpoint for the source
@@ -109,7 +114,7 @@ export abstract class Mmrcms extends Source {
     }
 
     async searchRequest(query: SearchRequest, metadata: any): Promise<PagedResults> {
-        const sanitizedQuery: string = (encodeURIComponent(query.title ?? "")).replace(" ", "+");
+        const sanitizedQuery: string = encodeURIComponent(query.title ?? "").replace(" ", "+");
         const request = createRequestObject({
             url: `${this.baseUrl}${this.sourceSearchUrl}${sanitizedQuery}`,
             method: "GET",
@@ -118,7 +123,7 @@ export abstract class Mmrcms extends Source {
         const response = await this.requestManager.schedule(request, 1);
         this.CloudFlareError(response.status);
         const mangaTiles = this.parser.parseSearchResults(response.data, this);
-        
+
         return createPagedResults({
             results: mangaTiles,
             metadata: undefined,
@@ -245,7 +250,7 @@ export abstract class Mmrcms extends Source {
             default:
                 return Promise.resolve(null);
         }
-        metadata = this.parser.isLastPage($, this) ? undefined : { page: page + 1 };
+        metadata = this.parser.isLastPage($) ? undefined : { page: page + 1 };
         return createPagedResults({
             results: mangaTiles,
             metadata,
