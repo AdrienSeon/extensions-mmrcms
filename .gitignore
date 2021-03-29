@@ -157,3 +157,4 @@ Temporary Items
 # Compiled sources
 dist/
 bundles/
+package-lock.json
