@@ -20,7 +20,7 @@ Contains Paperback sources using the "my Manga Reader CMS" template.
 - [Mangazuki](https://mangazuki.co)
 - [Mangazuki Raws](https://raws.mangazuki.co)
 - [Manhwas Men](https://manhwas.men)
-- [Nikushima](https://azbivo.webd.pro)
+- [Nikushimi](https://azbivo.webd.pro)
 - [Onma / مانجا اون لاين](https://onma.me)
 - [Op-VF](https://op-vf.com)
 - [Phoenix-Scans](https://phoenix-scans.pl)
