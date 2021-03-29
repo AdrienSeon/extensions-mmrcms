@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { ScanFr } from "../sources/ScanFr/ScanFr";
+import { ScanFr } from "../ScanFr/ScanFr";
 
 // Tests will fail because of cloudflare so we're skipping them
 describe.skip("ScanFr Tests", function () {

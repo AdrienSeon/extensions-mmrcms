@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { FallenAngels } from '../sources/FallenAngels/FallenAngels';
+import { FallenAngels } from '../FallenAngels/FallenAngels';
 
 
 describe("FallenAngels Tests", function () {

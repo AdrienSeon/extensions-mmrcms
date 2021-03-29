@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { FallenAngelsScans } from "../sources/FallenAngelsScans/FallenAngelsScans";
+import { FallenAngelsScans } from "../FallenAngelsScans/FallenAngelsScans";
 
 describe("FallenAngelsScans Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();
@@ -122,7 +122,7 @@ describe("FallenAngelsScans Tests", function () {
 	});
 
 	it("Testing Notifications", async () => {
-		const updates = await wrapper.filterUpdatedManga(source, new Date("2021-03-26"), [mangaId]);
+		const updates = await wrapper.filterUpdatedManga(source, new Date("2021-03-14"), [mangaId]);
 
 		expect(updates, "No server response").to.exist;
 		expect(updates, "Empty server response").to.not.be.empty;

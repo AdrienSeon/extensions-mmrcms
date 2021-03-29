@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { PhoenixScans } from "../sources/PhoenixScans/PhoenixScans";
+import { PhoenixScans } from "../PhoenixScans/PhoenixScans";
 
 describe("PhoenixScans Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

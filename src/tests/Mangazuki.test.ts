@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { Mangazuki } from "../sources/Mangazuki/Mangazuki";
+import { Mangazuki } from "../Mangazuki/Mangazuki";
 
 // Tests will fail because of cloudflare so we're skipping them
 describe.skip("Mangazuki Tests", function () {

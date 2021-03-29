@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { Jpmangas } from "../sources/Jpmangas/Jpmangas";
+import { Jpmangas } from "../Jpmangas/Jpmangas";
 
 describe("Jpmangas Tests", function () {
 	const wrapper: MmrcmsAPIWrapper = new MmrcmsAPIWrapper();

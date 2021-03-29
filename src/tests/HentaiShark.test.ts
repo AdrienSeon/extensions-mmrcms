@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { HentaiShark } from "../sources/HentaiShark/HentaiShark";
+import { HentaiShark } from "../HentaiShark/HentaiShark";
 
 // Tests will fail because of cloudflare so we're skipping them
 describe.skip("HentaiShark Tests", function () {

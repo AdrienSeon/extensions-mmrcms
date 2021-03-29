@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { LeoManga } from "../sources/LeoManga/LeoManga";
+import { LeoManga } from "../LeoManga/LeoManga";
 
 // Tests will fail because of cloudflare so we're skipping them
 describe.skip("LeoManga Tests", function () {

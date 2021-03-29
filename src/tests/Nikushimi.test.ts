@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { Nikushimi } from "../sources/Nikushimi/Nikushimi";
+import { Nikushimi } from "../Nikushimi/Nikushimi";
 
 
 // Tests will fail because of certificate is outdated so we're skipping them

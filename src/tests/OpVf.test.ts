@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 import { MmrcmsAPIWrapper } from "../MmrcmsAPIWrapper";
 import { Mmrcms } from "..";
-import { OpVf } from "../sources/OpVf/OpVf";
+import { OpVf } from "../OpVf/OpVf";
 
 // Tests will fail because of cloudflare so we're skipping them
 describe.skip("OpVf Tests", function () {
