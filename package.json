@@ -7,8 +7,8 @@
     "build": "tsc",
     "test": "node_modules/.bin/mocha --timeout 300000 -r ts-node/register src/**/*.test.ts",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
-    "bundle": "paperback bundle --sourceslocation=sources",
-    "serve": "paperback bundle --sourceslocation=sources && paperback serve -p 8000 --nobundle"
+    "bundle": "paperback bundle",
+    "serve": "paperback serve -p 8000"
   },
   "repository": {
     "type": "git",
