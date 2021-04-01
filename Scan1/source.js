@@ -374,7 +374,7 @@ class Mmrcms extends paperback_extensions_common_1.Source {
         /**
          * Helps with CloudFlare for some sources, makes it worse for others; override with empty string if the latter is true
          */
-        this.userAgentRandomizer = `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/78.0${Math.floor(Math.random() * 100000)}`;
+        this.userAgentRandomizer = ``;
         this.parser = new MmrcmsParser_1.Parser();
     }
     getMangaShareUrl(mangaId) {
@@ -385,7 +385,6 @@ class Mmrcms extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
                 method: "GET",
-                headers: this.constructHeaders({}),
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -398,7 +397,6 @@ class Mmrcms extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
                 method: "GET",
-                headers: this.constructHeaders({}),
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -411,7 +409,6 @@ class Mmrcms extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/${chapterId}`,
                 method: "GET",
-                headers: this.constructHeaders({}),
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -431,12 +428,10 @@ class Mmrcms extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}${this.sourceSearchUrl}${sanitizedQuery}`,
                 method: "GET",
-                headers: this.constructHeaders({}),
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
-            const json = response.data;
-            const mangaTiles = this.parser.parseSearchResults(json, query, this);
+            const mangaTiles = this.parser.parseSearchResults(response.data, query, this);
             return createPagedResults({
                 results: mangaTiles,
                 metadata: undefined,
@@ -452,7 +447,6 @@ class Mmrcms extends paperback_extensions_common_1.Source {
                 const request = createRequestObject({
                     url: `${this.baseUrl}/latest-release?page=${page}`,
                     method: "GET",
-                    headers: this.constructHeaders({}),
                 });
                 const response = yield this.requestManager.schedule(request, 1);
                 this.CloudFlareError(response.status);
@@ -473,12 +467,12 @@ class Mmrcms extends paperback_extensions_common_1.Source {
     }
     getHomePageSections(sectionCallback) {
         return __awaiter(this, void 0, void 0, function* () {
+            const collectedIds = new Set();
             const sections = [
                 {
                     request: createRequestObject({
                         url: `${this.baseUrl}/latest-release`,
                         method: "GET",
-                        headers: this.constructHeaders({}),
                     }),
                     section: createHomeSection({
                         id: "1_recently_updated",
@@ -490,7 +484,6 @@ class Mmrcms extends paperback_extensions_common_1.Source {
                     request: createRequestObject({
                         url: `${this.baseUrl}/filterList?page=1&sortBy=views&asc=false`,
                         method: "GET",
-                        headers: this.constructHeaders({}),
                     }),
                     section: createHomeSection({
                         id: "2_currenty_trending",
@@ -509,11 +502,11 @@ class Mmrcms extends paperback_extensions_common_1.Source {
                     const $ = this.cheerio.load(response.data);
                     switch (section.section.id) {
                         case "1_recently_updated": {
-                            section.section.items = this.parser.parseLatestRelease($, this);
+                            section.section.items = this.parser.parseLatestRelease($, collectedIds, this);
                             break;
                         }
                         case "2_currenty_trending": {
-                            section.section.items = this.parser.parseFilterList($, this);
+                            section.section.items = this.parser.parseFilterList($, collectedIds, this);
                             break;
                         }
                         default:
@@ -529,6 +522,11 @@ class Mmrcms extends paperback_extensions_common_1.Source {
     getViewMoreItems(homepageSectionId, metadata) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            let mangaTiles = [];
+            const collectedIds = new Set();
+            // So that there is enough MangaTiles on the page to trigger the refresh when scrolling on big screens like ipads
+            // const minimumNumberOfTiles: number = 22; // Worst case scenario to have 4 lines of tiles on ipad
+            // while (mangaTiles.length < minimumNumberOfTiles && typeof metadata !== "undefined") {
             const page = (_a = metadata === null || metadata === void 0 ? void 0 : metadata.page) !== null && _a !== void 0 ? _a : 1;
             let param = "";
             switch (homepageSectionId) {
@@ -546,26 +544,25 @@ class Mmrcms extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}`,
                 method: "GET",
-                headers: this.constructHeaders({}),
                 param,
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
             const $ = this.cheerio.load(response.data);
-            let mangaTiles = [];
             switch (homepageSectionId) {
                 case "1_recently_updated": {
-                    mangaTiles = this.parser.parseLatestRelease($, this);
+                    mangaTiles = mangaTiles.concat(this.parser.parseLatestRelease($, collectedIds, this));
                     break;
                 }
                 case "2_currenty_trending": {
-                    mangaTiles = this.parser.parseFilterList($, this);
+                    mangaTiles = mangaTiles.concat(this.parser.parseFilterList($, collectedIds, this));
                     break;
                 }
                 default:
                     return Promise.resolve(null);
             }
             metadata = this.parser.isLastPage($) ? undefined : { page: page + 1 };
+            // }
             return createPagedResults({
                 results: mangaTiles,
                 metadata,
@@ -576,15 +573,7 @@ class Mmrcms extends paperback_extensions_common_1.Source {
         return createRequestObject({
             url: `${this.baseUrl}`,
             method: "GET",
-            headers: this.constructHeaders({}),
         });
-    }
-    constructHeaders(headers, refererPath) {
-        if (this.userAgentRandomizer !== "") {
-            headers["user-agent"] = this.userAgentRandomizer;
-        }
-        headers["referer"] = `${this.baseUrl}${refererPath !== null && refererPath !== void 0 ? refererPath : ""}`;
-        return headers;
     }
     globalRequestHeaders() {
         if (this.userAgentRandomizer !== "") {
@@ -602,8 +591,8 @@ class Mmrcms extends paperback_extensions_common_1.Source {
         }
     }
     CloudFlareError(status) {
-        if (status == 503) {
-            throw new Error("CLOUDFLARE BYPASS ERROR:\nPlease go to Settings > Sources > <The name of this source> and press Cloudflare Bypass");
+        if (status === 503) {
+            throw new Error("CLOUDFLARE BYPASS ERROR: Please go to Settings > Sources > <The name of this source> and press Cloudflare Bypass");
         }
     }
 }
@@ -642,9 +631,9 @@ class Parser {
         // Thumbnail
         const image = this.getThumbnailSrc((_a = $(".row [class^=img-responsive]").first().attr("src")) !== null && _a !== void 0 ? _a : "", mangaId, source);
         // Rating
-        const rating = Number(((_b = $("#item-rating").attr("data-score")) !== null && _b !== void 0 ? _b : "0").replace(/^\s+|\s+$/g, ""));
+        const rating = Number(((_b = $("#item-rating").attr("data-score")) !== null && _b !== void 0 ? _b : "0").replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim());
         // Description
-        let desc = this.decodeHTMLEntity($(".row .well p").text().replace(/^\s+|\s+$/g, ""));
+        let desc = this.decodeHTMLEntity($(".row .well p").text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim());
         let titles = [];
         let author = "Unknown";
         let artist = "Unknown";
@@ -653,34 +642,34 @@ class Parser {
         const tags = [];
         for (const element of $(".row .dl-horizontal dt").toArray()) {
             // Titles
-            titles.push(this.decodeHTMLEntity($("h2.listmanga-header, h2.widget-title").first().text().replace(/^\s+|\s+$/g, "")));
+            titles.push(this.decodeHTMLEntity($("h2.listmanga-header, h2.widget-title").first().text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
             if (altTitesTranslation.includes($(element).text().trim().toLowerCase())) {
                 for (const title of $(element).next().text().split(",")) {
-                    titles.push(this.decodeHTMLEntity(title.replace(/^\s+|\s+$/g, "")));
+                    titles.push(this.decodeHTMLEntity(title.replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Author
             if (authorTranslations.includes($(element).text().trim().toLowerCase()))
-                author = this.decodeHTMLEntity($(element).next().text().replace(/^\s+|\s+$/g, ""));
+                author = this.decodeHTMLEntity($(element).next().text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim());
             // Artist
             if (artistTranslations.includes($(element).text().trim().toLowerCase()))
-                artist = this.decodeHTMLEntity($(element).next().text().replace(/^\s+|\s+$/g, ""));
+                artist = this.decodeHTMLEntity($(element).next().text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim());
             // Genres
             if (genreTranslations.includes($(element).text().trim().toLowerCase())) {
                 for (const genreElement of $("a", $(element).next()).toArray()) {
-                    genres.push(this.decodeHTMLEntity($(genreElement).text().replace(/^\s+|\s+$/g, "")));
+                    genres.push(this.decodeHTMLEntity($(genreElement).text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Tags
             if (tagsTranslations.includes($(element).text().trim().toLowerCase())) {
                 for (const tagElement of $("a", $(element).next()).toArray()) {
-                    tags.push(this.decodeHTMLEntity($(tagElement).text().replace(/^\s+|\s+$/g, "")));
+                    tags.push(this.decodeHTMLEntity($(tagElement).text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Status
-            if (statusTranslations.includes($(element).text().trim().toLowerCase()) && statusOngoingTranslations.includes($(element).next().text().replace(/^\s+|\s+$/g, "").toLowerCase()))
+            if (statusTranslations.includes($(element).text().trim().toLowerCase()) && statusOngoingTranslations.includes($(element).next().text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim().toLowerCase()))
                 status = paperback_extensions_common_1.MangaStatus.ONGOING;
-            if (statusTranslations.includes($(element).text().trim().toLowerCase()) && statusCompleteTranslations.includes($(element).next().text().replace(/^\s+|\s+$/g, "").toLowerCase()))
+            if (statusTranslations.includes($(element).text().trim().toLowerCase()) && statusCompleteTranslations.includes($(element).next().text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim().toLowerCase()))
                 status = paperback_extensions_common_1.MangaStatus.COMPLETED;
         }
         // When details are in a .panel instead of .row (spanish sources)
@@ -689,31 +678,31 @@ class Parser {
             // Titles
             if (altTitesTranslation.includes(metadata[0].trim().toLowerCase())) {
                 for (const title of metadata[1].split(",")) {
-                    titles.push(this.decodeHTMLEntity(title.replace(/^\s+|\s+$/g, "")));
+                    titles.push(this.decodeHTMLEntity(title.replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
                 }
             }
-            // Author
+            // Author .replace(/\s+|\n+/g, " ") .replace(/^\s+|\s+$/g, "")
             if (authorTranslations.includes(metadata[0].trim().toLowerCase()))
-                author = this.decodeHTMLEntity(metadata[1].replace(/^\s+|\s+$/g, ""));
+                author = this.decodeHTMLEntity(metadata[1].replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim());
             // Artist
             if (artistTranslations.includes(metadata[0].trim().toLowerCase()))
-                artist = this.decodeHTMLEntity(metadata[1].replace(/^\s+|\s+$/g, ""));
+                artist = this.decodeHTMLEntity(metadata[1].replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim());
             // Genres
             if (genreTranslations.includes(metadata[0].trim().toLowerCase())) {
                 for (const genreElement of $("a", $(element)).toArray()) {
-                    genres.push(this.decodeHTMLEntity($(genreElement).text().replace(/^\s+|\s+$/g, "")));
+                    genres.push(this.decodeHTMLEntity($(genreElement).text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Tags
             if (tagsTranslations.includes(metadata[0].trim().toLowerCase())) {
                 for (const tagElement of $("a", $(element)).toArray()) {
-                    tags.push(this.decodeHTMLEntity($(tagElement).text().replace(/^\s+|\s+$/g, "")));
+                    tags.push(this.decodeHTMLEntity($(tagElement).text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
                 }
             }
             // Status
-            if (statusTranslations.includes(metadata[0].trim().toLowerCase()) && statusOngoingTranslations.includes(metadata[1].replace(/^\s+|\s+$/g, "").toLowerCase()))
+            if (statusTranslations.includes(metadata[0].trim().toLowerCase()) && statusOngoingTranslations.includes(metadata[1].replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim().toLowerCase()))
                 status = paperback_extensions_common_1.MangaStatus.ONGOING;
-            if (statusTranslations.includes(metadata[0].trim().toLowerCase()) && statusCompleteTranslations.includes(metadata[1].replace(/^\s+|\s+$/g, "").toLowerCase()))
+            if (statusTranslations.includes(metadata[0].trim().toLowerCase()) && statusCompleteTranslations.includes(metadata[1].replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim().toLowerCase()))
                 status = paperback_extensions_common_1.MangaStatus.COMPLETED;
             // Description
             if (descriptionTranslations.includes($("b", $(element)).text().trim().toLowerCase()))
@@ -734,9 +723,11 @@ class Parser {
         // Last update
         let lastUpdate = undefined;
         if ($("ul[class^=chapters] > li:not(.btn)").length > 0)
-            lastUpdate = new Date(Date.parse($("[class^=date-chapter-title-rtl]", $("ul[class^=chapters] > li:not(.btn)").first()).text().replace(/^\s+|\s+$/g, ""))).toString();
+            lastUpdate = new Date(Date.parse($("[class^=date-chapter-title-rtl]", $("ul[class^=chapters] > li:not(.btn)").first()).text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim())).toString();
         if ($("table.table tr").length > 0)
-            lastUpdate = new Date(Date.parse($(".glyphicon-time", $("table.table tr").first()).parent().text().replace(/^\s+|\s+$/g, ""))).toString();
+            lastUpdate = new Date(Date.parse($(".glyphicon-time", $("table.table tr").first()).parent().text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim())).toString();
+        if (!titles || !status)
+            throw new Error("An error occured while parsing the requested manga");
         return createManga({
             id: mangaId,
             titles,
@@ -760,9 +751,9 @@ class Parser {
                 const chapterNode = source.name === "Mangas.in" ? $("i .capitulo_enlace", $(element)).first() : $("[class^=chapter-title-rtl] a", $(element)).first();
                 const url = (_a = $(chapterNode).first().attr("href")) !== null && _a !== void 0 ? _a : "";
                 const chapId = (_b = url.split("/").pop()) !== null && _b !== void 0 ? _b : "";
-                const releaseDate = new Date(Date.parse($("[class^=date-chapter-title-rtl]", $(element)).text().replace(/^\s+|\s+$/g, "")));
+                const releaseDate = new Date(Date.parse($("[class^=date-chapter-title-rtl]", $(element)).text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
                 const chapNum = chapId.match(/\d+\.?\d+/g) ? Number(chapId.match(/\d+\.?\d+/g)[0]) : 0;
-                const chapName = $("em", $(chapterNode).parent()).first().text().replace(/^\s+|\s+$/g, "");
+                const chapName = $("em", $(chapterNode).parent()).first().text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim();
                 chapters.push(createChapter({
                     id: chapId,
                     mangaId: mangaId,
@@ -778,7 +769,7 @@ class Parser {
                 if ($("td", $(element)).text() !== "") {
                     const url = (_d = $("td a", $(element)).first().attr("href")) !== null && _d !== void 0 ? _d : "";
                     const chapId = (_e = url.split("/").pop()) !== null && _e !== void 0 ? _e : "";
-                    const releaseDate = new Date(Date.parse($(".glyphicon-time", $(element)).parent().text().replace(/^\s+|\s+$/g, "")));
+                    const releaseDate = new Date(Date.parse($(".glyphicon-time", $(element)).parent().text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim()));
                     const chapNum = chapId.match(/\d+\.?\d+/g) ? Number(chapId.match(/\d+\.?\d+/g)[0]) : 0;
                     const chapName = "Chapter " + chapNum;
                     chapters.push(createChapter({
@@ -805,6 +796,8 @@ class Parser {
                 pages.push(encodeURI(url));
             }
         }
+        if (!pages)
+            throw new Error("An error occured while parsing pages for this chapter");
         return createChapterDetails({
             id: chapterId,
             mangaId,
@@ -835,6 +828,8 @@ class Parser {
                 const id = element.data;
                 const title = element.value;
                 const image = encodeURI(`${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`);
+                if (!id || !title)
+                    continue;
                 mangaTiles.push(createMangaTile({
                     id: id,
                     title: title,
@@ -850,7 +845,7 @@ class Parser {
         const context = $("div.mangalist");
         for (const element of $("div.manga-item", context).toArray()) {
             const id = (_b = ((_a = $(source.latestListSelector, $(element)).attr("href")) !== null && _a !== void 0 ? _a : "").split("/").pop()) !== null && _b !== void 0 ? _b : "";
-            const mangaDate = this.convertTime($("[style=\"direction: ltr;\"]", $(element)).text().replace(/^\s+|\s+$/g, ""), source);
+            const mangaDate = this.convertTime($("[style=\"direction: ltr;\"]", $(element)).text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim(), source);
             if (mangaDate >= referenceTime) {
                 if (allMangas.has(id)) {
                     updatedMangas.push(id);
@@ -868,7 +863,7 @@ class Parser {
         const context = $("div.mangalist, div.grid-manga, div#destacados");
         for (const element of $("div.manga-item, div.thumbnail", context).toArray()) {
             const id = (_b = ((_a = $("a.chart-title:first-of-type, .caption h3 a", $(element)).attr("href")) !== null && _a !== void 0 ? _a : "").split("/").pop()) !== null && _b !== void 0 ? _b : "";
-            const mangaDate = this.convertTime($("[style=\"direction: ltr;\"]", $(element)).text().replace(/^\s+|\s+$/g, ""), source);
+            const mangaDate = this.convertTime($("[style=\"direction: ltr;\"]", $(element)).text().replace(/\s+|\n+/g, " ").replace(/\s+|\n+/g, " ").trim(), source);
             if (mangaDate >= referenceTime) {
                 if (allMangas.has(id)) {
                     updatedMangas.push(id);
@@ -880,13 +875,12 @@ class Parser {
         }
         return { updates: updatedMangas, hasMore: true };
     }
-    parseLatestRelease($, source) {
+    parseLatestRelease($, collectedIds, source) {
         const mangaTiles = [];
-        const collectedIds = new Set;
         return source.latestIsInListFormat ? this.parseLatestList($, collectedIds, mangaTiles, source) : this.parseLatestGrid($, collectedIds, mangaTiles, source);
     }
     parseLatestList($, collectedIds, mangaTiles, source) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         const context = $("div.mangalist");
         let id = "";
         let image = "";
@@ -895,8 +889,10 @@ class Parser {
         for (const element of $("div.manga-item", context).toArray()) {
             id = (_b = ((_a = $(source.latestListSelector, $(element)).attr("href")) !== null && _a !== void 0 ? _a : "").split("/").pop()) !== null && _b !== void 0 ? _b : "";
             image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
-            title = $(source.latestListSelector, $(element)).text().trim();
-            chapter = "Chapter " + ((_c = $("h6.events-subtitle a", $(element)).text().replace(/\s+/g, " ").trim().match(/\d+\.?\d+/g)) !== null && _c !== void 0 ? _c : [""])[0];
+            title = (_c = $(source.latestListSelector, $(element)).text().trim()) !== null && _c !== void 0 ? _c : "";
+            chapter = "Chapter " + ((_d = $("h6.events-subtitle a", $(element)).text().replace(/\s+/g, " ").trim().match(/\d+\.?\d+/g)) !== null && _d !== void 0 ? _d : [""])[0];
+            if (!id || !title)
+                continue;
             if (!collectedIds.has(id)) {
                 mangaTiles.push(createMangaTile({
                     id,
@@ -910,7 +906,7 @@ class Parser {
         return mangaTiles;
     }
     parseLatestGrid($, collectedIds, mangaTiles, source) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         const context = $("div.mangalist, div.grid-manga, div#destacados");
         let id = "";
         let image = "";
@@ -919,8 +915,10 @@ class Parser {
         for (const element of $("div.manga-item, div.thumbnail", context).toArray()) {
             id = (_b = ((_a = $("a.chart-title:first-of-type, .caption h3 a", $(element)).attr("href")) !== null && _a !== void 0 ? _a : "").split("/").pop()) !== null && _b !== void 0 ? _b : "";
             image = `${source.baseUrl}/uploads/manga/${id}/cover/cover_250x350.jpg`;
-            title = $("a.chart-title:first-of-type, .caption h3 a", $(element)).text().trim();
-            chapter = "Chapter " + ((_c = $("div.media-body a:last-of-type, .caption p", $(element)).text().replace(/\s+/g, " ").trim().match(/\d+\.?\d+/g)) !== null && _c !== void 0 ? _c : [""])[0];
+            title = (_c = $("a.chart-title:first-of-type, .caption h3 a", $(element)).text().trim()) !== null && _c !== void 0 ? _c : "";
+            chapter = "Chapter " + ((_d = $("div.media-body a:last-of-type, .caption p", $(element)).text().replace(/\s+/g, " ").trim().match(/\d+\.?\d+/g)) !== null && _d !== void 0 ? _d : [""])[0];
+            if (!id || !title)
+                continue;
             if (!collectedIds.has(id)) {
                 mangaTiles.push(createMangaTile({
                     id,
@@ -933,10 +931,9 @@ class Parser {
         }
         return mangaTiles;
     }
-    parseFilterList($, source) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    parseFilterList($, collectedIds, source) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
         const mangaTiles = [];
-        const collectedIds = new Set;
         let id = "";
         let image = "";
         let title = "";
@@ -946,44 +943,40 @@ class Parser {
             const idNode = $(".chart-title", $(element));
             if (idNode.length > 0) {
                 id = (_b = ((_a = idNode.attr("href")) !== null && _a !== void 0 ? _a : "").split("/").pop()) !== null && _b !== void 0 ? _b : "";
-                title = this.decodeHTMLEntity(idNode.text().replace(/\s+/g, " ").trim());
+                title = (_c = this.decodeHTMLEntity(idNode.text().replace(/\s+/g, " ").trim())) !== null && _c !== void 0 ? _c : "";
             }
             else {
-                id = (_d = ((_c = $("a").attr("href")) !== null && _c !== void 0 ? _c : "").split("/").pop()) !== null && _d !== void 0 ? _d : "";
+                id = (_e = ((_d = $("a").attr("href")) !== null && _d !== void 0 ? _d : "").split("/").pop()) !== null && _e !== void 0 ? _e : "";
                 const captionNode = $("div.caption", $(element));
                 const captionNodeH3 = $("h3", captionNode);
                 if (captionNodeH3.length > 0) {
-                    title = this.decodeHTMLEntity(captionNodeH3.text()); // Submanga
+                    title = (_f = this.decodeHTMLEntity(captionNodeH3.text())) !== null && _f !== void 0 ? _f : ""; // Submanga
                 }
                 else {
-                    title = this.decodeHTMLEntity(captionNode.text().replace(/\s+/g, " ").trim()); // HentaiShark
+                    title = (_g = this.decodeHTMLEntity(captionNode.text().replace(/\s+/g, " ").trim())) !== null && _g !== void 0 ? _g : ""; // HentaiShark
                 }
             }
             // Image
             const imageNode = $("img", $(element));
-            if (((_e = imageNode.attr("data-background-image")) !== null && _e !== void 0 ? _e : "").length > 0) {
-                image = (_f = imageNode.attr("data-background-image")) !== null && _f !== void 0 ? _f : ""; // Utsukushii
+            if (((_h = imageNode.attr("data-background-image")) !== null && _h !== void 0 ? _h : "").length > 0) {
+                image = (_j = imageNode.attr("data-background-image")) !== null && _j !== void 0 ? _j : ""; // Utsukushii
             }
-            else if (((_g = imageNode.attr("data-src")) !== null && _g !== void 0 ? _g : "").length > 0) {
-                image = this.getThumbnailSrc((_h = imageNode.attr("data-src")) !== null && _h !== void 0 ? _h : "", id, source);
+            else if (((_k = imageNode.attr("data-src")) !== null && _k !== void 0 ? _k : "").length > 0) {
+                image = this.getThumbnailSrc((_l = imageNode.attr("data-src")) !== null && _l !== void 0 ? _l : "", id, source);
             }
             else {
-                image = this.getThumbnailSrc((_j = imageNode.attr("src")) !== null && _j !== void 0 ? _j : "", id, source);
+                image = this.getThumbnailSrc((_m = imageNode.attr("src")) !== null && _m !== void 0 ? _m : "", id, source);
             }
             // Subtitle
-            if (((_k = $("i.fa-eye", $(element)).parent().text()) !== null && _k !== void 0 ? _k : "").length > 0) {
-                views =
-                    $("i.fa-eye", $(element))
-                        .parent()
-                        .text()
-                        .replace(/\s+/g, " ")
-                        .trim()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " views";
+            if (((_o = $("i.fa-eye", $(element)).parent().text()) !== null && _o !== void 0 ? _o : "").length > 0) {
+                views = $("i.fa-eye", $(element)).parent().text().replace(/\s+/g, " ").trim().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " views";
             }
             else {
                 views = "";
             }
             // Push results
+            if (!id || !title)
+                continue;
             if (!collectedIds.has(id)) {
                 mangaTiles.push(createMangaTile({
                     id,
