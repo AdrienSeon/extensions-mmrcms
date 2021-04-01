@@ -1,6 +1,7 @@
 {
   "name": "extensions-mmrcms",
   "version": "1.0.0",
+  "repositoryName": "[PROMISES] mMRCMS Extensions",
   "description": "Contains Paperback sources using the \"my Manga Reader CMS\" template.",
   "scripts": {
     "start": "tsc && node dist/api.js",

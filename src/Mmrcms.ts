@@ -62,7 +62,7 @@ export abstract class Mmrcms extends Source {
     /**
      * Helps with CloudFlare for some sources, makes it worse for others; override with empty string if the latter is true
      */
-    userAgentRandomizer: string = `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/78.0${Math.floor(Math.random() * 100000)}`;
+    userAgentRandomizer: string = ``;
 
     parser = new Parser();
 
@@ -74,7 +74,6 @@ export abstract class Mmrcms extends Source {
         const request = createRequestObject({
             url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
             method: "GET",
-            headers: this.constructHeaders({}),
         });
         const response = await this.requestManager.schedule(request, 1);
         this.CloudFlareError(response.status);
@@ -87,7 +86,6 @@ export abstract class Mmrcms extends Source {
         const request = createRequestObject({
             url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
             method: "GET",
-            headers: this.constructHeaders({}),
         });
         const response = await this.requestManager.schedule(request, 1);
         this.CloudFlareError(response.status);
@@ -100,7 +98,6 @@ export abstract class Mmrcms extends Source {
         const request = createRequestObject({
             url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/${chapterId}`,
             method: "GET",
-            headers: this.constructHeaders({}),
         });
         const response = await this.requestManager.schedule(request, 1);
         this.CloudFlareError(response.status);
@@ -118,12 +115,10 @@ export abstract class Mmrcms extends Source {
         const request = createRequestObject({
             url: `${this.baseUrl}${this.sourceSearchUrl}${sanitizedQuery}`,
             method: "GET",
-            headers: this.constructHeaders({}),
         });
         const response = await this.requestManager.schedule(request, 1);
         this.CloudFlareError(response.status);
-        const json: any = response.data;
-        const mangaTiles = this.parser.parseSearchResults(json, query, this);
+        const mangaTiles = this.parser.parseSearchResults(response.data, query, this);
         return createPagedResults({
             results: mangaTiles,
             metadata: undefined,
@@ -138,7 +133,6 @@ export abstract class Mmrcms extends Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/latest-release?page=${page}`,
                 method: "GET",
-                headers: this.constructHeaders({}),
             });
             const response = await this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -158,12 +152,12 @@ export abstract class Mmrcms extends Source {
     }
 
     async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
+        const collectedIds: Set<string> = new Set();
         const sections = [
             {
                 request: createRequestObject({
                     url: `${this.baseUrl}/latest-release`,
                     method: "GET",
-                    headers: this.constructHeaders({}),
                 }),
                 section: createHomeSection({
                     id: "1_recently_updated",
@@ -175,7 +169,6 @@ export abstract class Mmrcms extends Source {
                 request: createRequestObject({
                     url: `${this.baseUrl}/filterList?page=1&sortBy=views&asc=false`,
                     method: "GET",
-                    headers: this.constructHeaders({}),
                 }),
                 section: createHomeSection({
                     id: "2_currenty_trending",
@@ -195,11 +188,11 @@ export abstract class Mmrcms extends Source {
                     const $ = this.cheerio.load(response.data);
                     switch (section.section.id) {
                         case "1_recently_updated": {
-                            section.section.items = this.parser.parseLatestRelease($, this);
+                            section.section.items = this.parser.parseLatestRelease($, collectedIds, this);
                             break;
                         }
                         case "2_currenty_trending": {
-                            section.section.items = this.parser.parseFilterList($, this);
+                            section.section.items = this.parser.parseFilterList($, collectedIds, this);
                             break;
                         }
                         default:
@@ -214,43 +207,47 @@ export abstract class Mmrcms extends Source {
     }
 
     async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults | null> {
-        const page: number = metadata?.page ?? 1;
-        let param: string = "";
-        switch (homepageSectionId) {
-            case "1_recently_updated": {
-                param = `/latest-release?page=${page}`;
-                break;
-            }
-            case "2_currenty_trending": {
-                param = `/filterList?page=${page}&sortBy=views&asc=false`;
-                break;
-            }
-            default:
-                return Promise.resolve(null);
-        }
-        const request = createRequestObject({
-            url: `${this.baseUrl}`,
-            method: "GET",
-            headers: this.constructHeaders({}),
-            param,
-        });
-        const response = await this.requestManager.schedule(request, 1);
-        this.CloudFlareError(response.status);
-        const $ = this.cheerio.load(response.data);
         let mangaTiles: MangaTile[] = [];
-        switch (homepageSectionId) {
-            case "1_recently_updated": {
-                mangaTiles = this.parser.parseLatestRelease($, this);
-                break;
+        const collectedIds: Set<string> = new Set();
+        // So that there is enough MangaTiles on the page to trigger the refresh when scrolling on big screens like ipads
+        // const minimumNumberOfTiles: number = 22; // Worst case scenario to have 4 lines of tiles on ipad
+        // while (mangaTiles.length < minimumNumberOfTiles && typeof metadata !== "undefined") {
+            const page: number = metadata?.page ?? 1;
+            let param: string = "";
+            switch (homepageSectionId) {
+                case "1_recently_updated": {
+                    param = `/latest-release?page=${page}`;
+                    break;
+                }
+                case "2_currenty_trending": {
+                    param = `/filterList?page=${page}&sortBy=views&asc=false`;
+                    break;
+                }
+                default:
+                    return Promise.resolve(null);
             }
-            case "2_currenty_trending": {
-                mangaTiles = this.parser.parseFilterList($, this);
-                break;
+            const request = createRequestObject({
+                url: `${this.baseUrl}`,
+                method: "GET",
+                param,
+            });
+            const response = await this.requestManager.schedule(request, 1);
+            this.CloudFlareError(response.status);
+            const $ = this.cheerio.load(response.data);
+            switch (homepageSectionId) {
+                case "1_recently_updated": {
+                    mangaTiles = mangaTiles.concat(this.parser.parseLatestRelease($, collectedIds, this));
+                    break;
+                }
+                case "2_currenty_trending": {
+                    mangaTiles = mangaTiles.concat(this.parser.parseFilterList($, collectedIds, this));
+                    break;
+                }
+                default:
+                    return Promise.resolve(null);
             }
-            default:
-                return Promise.resolve(null);
-        }
-        metadata = this.parser.isLastPage($) ? undefined : { page: page + 1 };
+            metadata = this.parser.isLastPage($) ? undefined : { page: page + 1 };
+        // }
         return createPagedResults({
             results: mangaTiles,
             metadata,
@@ -261,16 +258,7 @@ export abstract class Mmrcms extends Source {
         return createRequestObject({
             url: `${this.baseUrl}`,
             method: "GET",
-            headers: this.constructHeaders({}),
         });
-    }
-
-    constructHeaders(headers: any, refererPath?: string): any {
-        if (this.userAgentRandomizer !== "") {
-            headers["user-agent"] = this.userAgentRandomizer;
-        }
-        headers["referer"] = `${this.baseUrl}${refererPath ?? ""}`;
-        return headers;
     }
 
     globalRequestHeaders(): RequestHeaders {
@@ -289,8 +277,8 @@ export abstract class Mmrcms extends Source {
     }
 
     CloudFlareError(status: any) {
-        if (status == 503) {
-            throw new Error("CLOUDFLARE BYPASS ERROR:\nPlease go to Settings > Sources > <The name of this source> and press Cloudflare Bypass");
+        if (status === 503) {
+            throw new Error("CLOUDFLARE BYPASS ERROR: Please go to Settings > Sources > <The name of this source> and press Cloudflare Bypass");
         }
     }
 }
