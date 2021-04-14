@@ -62,7 +62,9 @@ export abstract class Mmrcms extends Source {
     /**
      * Helps with CloudFlare for some sources, makes it worse for others; override with empty string if the latter is true
      */
-    userAgentRandomizer: string = `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/78.0${Math.floor(Math.random() * 100000)}`;
+    userAgentRandomizer: string = `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/78.0${Math.floor(
+        Math.random() * 100000
+    )}`;
 
     parser = new Parser();
 
@@ -125,7 +127,11 @@ export abstract class Mmrcms extends Source {
         });
     }
 
-    async filterUpdatedManga(mangaUpdatesFoundCallback: (updates: MangaUpdates) => void, time: Date, ids: string[]): Promise<void> {
+    async filterUpdatedManga(
+        mangaUpdatesFoundCallback: (updates: MangaUpdates) => void,
+        time: Date,
+        ids: string[]
+    ): Promise<void> {
         const allMangas = new Set(ids);
         let page: number = 1;
         let loadNextPage = true;
@@ -137,7 +143,9 @@ export abstract class Mmrcms extends Source {
             const response = await this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
             const $ = this.cheerio.load(response.data);
-            const updatedManga = this.latestIsInListFormat ? this.parser.filterUpdatedMangaList($, time, allMangas, this) : this.parser.filterUpdatedMangaGrid($, time, allMangas, this);
+            const updatedManga = this.latestIsInListFormat
+                ? this.parser.filterUpdatedMangaList($, time, allMangas, this)
+                : this.parser.filterUpdatedMangaGrid($, time, allMangas, this);
             loadNextPage = updatedManga.hasMore;
             if (loadNextPage) {
                 page++;
@@ -261,24 +269,26 @@ export abstract class Mmrcms extends Source {
         });
     }
 
-    globalRequestHeaders(): RequestHeaders {
-        if (this.userAgentRandomizer !== "") {
-            return {
-                referer: `${this.baseUrl}/`,
-                "user-agent": this.userAgentRandomizer,
-                accept: "image/avif,image/apng,image/jpeg;q=0.9,image/png;q=0.9,image/*;q=0.8",
-            };
-        } else {
-            return {
-                referer: `${this.baseUrl}/`,
-                accept: "image/avif,image/apng,image/jpeg;q=0.9,image/png;q=0.9,image/*;q=0.8",
-            };
-        }
-    }
+    // globalRequestHeaders(): Promise<RequestHeaders> {
+    //     if (this.userAgentRandomizer !== "") {
+    //         return {
+    //             "referer": `${this.baseUrl}/`,
+    //             "user-agent": this.userAgentRandomizer,
+    //             "accept-encoding": "image/avif,image/apng,image/jpeg;q=0.9,image/png;q=0.9,image/*;q=0.8",
+    //         };
+    //     } else {
+    //         return {
+    //             "referer": `${this.baseUrl}/`,
+    //             "accept-encoding": "image/avif,image/apng,image/jpeg;q=0.9,image/png;q=0.9,image/*;q=0.8",
+    //         };
+    //     }
+    // }
 
     CloudFlareError(status: any) {
         if (status === 503) {
-            throw new Error("CLOUDFLARE BYPASS ERROR: Please go to Settings > Sources > <The name of this source> and press Cloudflare Bypass");
+            throw new Error(
+                "CLOUDFLARE BYPASS ERROR: Please go to Settings > Sources > <The name of this source> and press Cloudflare Bypass"
+            );
         }
     }
 }
