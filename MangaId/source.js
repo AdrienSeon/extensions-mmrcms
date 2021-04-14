@@ -452,7 +452,7 @@ class Mmrcms extends paperback_extensions_common_1.Source {
         /**
          * Helps with CloudFlare for some sources, makes it worse for others; override with empty string if the latter is true
          */
-        this.userAgentRandomizer = ``;
+        this.userAgentRandomizer = `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/78.0${Math.floor(Math.random() * 100000)}`;
         this.parser = new MmrcmsParser_1.Parser();
     }
     getMangaShareUrl(mangaId) {
@@ -509,7 +509,7 @@ class Mmrcms extends paperback_extensions_common_1.Source {
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
-            const mangaTiles = this.parser.parseSearchResults(response.data, query, this);
+            const mangaTiles = this.parser.parseSearchResults(JSON.parse(response.data), query, this);
             return createPagedResults({
                 results: mangaTiles,
                 metadata: undefined,
@@ -603,44 +603,44 @@ class Mmrcms extends paperback_extensions_common_1.Source {
             let mangaTiles = [];
             const collectedIds = new Set();
             // So that there is enough MangaTiles on the page to trigger the refresh when scrolling on big screens like ipads
-            // const minimumNumberOfTiles: number = 22; // Worst case scenario to have 4 lines of tiles on ipad
-            // while (mangaTiles.length < minimumNumberOfTiles && typeof metadata !== "undefined") {
-            const page = (_a = metadata === null || metadata === void 0 ? void 0 : metadata.page) !== null && _a !== void 0 ? _a : 1;
-            let param = "";
-            switch (homepageSectionId) {
-                case "1_recently_updated": {
-                    param = `/latest-release?page=${page}`;
-                    break;
+            const minimumNumberOfTiles = 22; // Worst case scenario to have 4 lines of tiles on ipad
+            while (mangaTiles.length < minimumNumberOfTiles && typeof metadata !== "undefined") {
+                const page = (_a = metadata === null || metadata === void 0 ? void 0 : metadata.page) !== null && _a !== void 0 ? _a : 1;
+                let param = "";
+                switch (homepageSectionId) {
+                    case "1_recently_updated": {
+                        param = `/latest-release?page=${page}`;
+                        break;
+                    }
+                    case "2_currenty_trending": {
+                        param = `/filterList?page=${page}&sortBy=views&asc=false`;
+                        break;
+                    }
+                    default:
+                        return Promise.resolve(null);
                 }
-                case "2_currenty_trending": {
-                    param = `/filterList?page=${page}&sortBy=views&asc=false`;
-                    break;
+                const request = createRequestObject({
+                    url: `${this.baseUrl}`,
+                    method: "GET",
+                    param,
+                });
+                const response = yield this.requestManager.schedule(request, 1);
+                this.CloudFlareError(response.status);
+                const $ = this.cheerio.load(response.data);
+                switch (homepageSectionId) {
+                    case "1_recently_updated": {
+                        mangaTiles = mangaTiles.concat(this.parser.parseLatestRelease($, collectedIds, this));
+                        break;
+                    }
+                    case "2_currenty_trending": {
+                        mangaTiles = mangaTiles.concat(this.parser.parseFilterList($, collectedIds, this));
+                        break;
+                    }
+                    default:
+                        return Promise.resolve(null);
                 }
-                default:
-                    return Promise.resolve(null);
+                metadata = this.parser.isLastPage($) ? undefined : { page: page + 1 };
             }
-            const request = createRequestObject({
-                url: `${this.baseUrl}`,
-                method: "GET",
-                param,
-            });
-            const response = yield this.requestManager.schedule(request, 1);
-            this.CloudFlareError(response.status);
-            const $ = this.cheerio.load(response.data);
-            switch (homepageSectionId) {
-                case "1_recently_updated": {
-                    mangaTiles = mangaTiles.concat(this.parser.parseLatestRelease($, collectedIds, this));
-                    break;
-                }
-                case "2_currenty_trending": {
-                    mangaTiles = mangaTiles.concat(this.parser.parseFilterList($, collectedIds, this));
-                    break;
-                }
-                default:
-                    return Promise.resolve(null);
-            }
-            metadata = this.parser.isLastPage($) ? undefined : { page: page + 1 };
-            // }
             return createPagedResults({
                 results: mangaTiles,
                 metadata,
