@@ -126,11 +126,11 @@ describe("Jpmangas Tests", function () {
 	});
 
 	it("Testing Notifications", async () => {
-		const updates = await wrapper.filterUpdatedManga(source, new Date("2021-03-26"), [mangaId]);
+		const updates = await wrapper.filterUpdatedManga(source, new Date("2021-04-08"), [mangaId]);
 
 		expect(updates, "No server response").to.exist;
 		expect(updates, "Empty server response").to.not.be.empty;
-		expect(updates[0], "No updates").to.not.be.empty;
+		expect(updates[0].ids, "No updates").to.not.be.empty;
 	});
 
 	it("Testing get tags", async () => {

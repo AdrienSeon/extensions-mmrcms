@@ -127,7 +127,7 @@ describe.skip("OpVf Tests", function () {
 
 		expect(updates, "No server response").to.exist;
 		expect(updates, "Empty server response").to.not.be.empty;
-		expect(updates[0], "No updates").to.not.be.empty;
+		expect(updates[0].ids, "No updates").to.not.be.empty;
 	});
 
 	it("Testing get tags", async () => {

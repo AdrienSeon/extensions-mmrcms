@@ -62,7 +62,7 @@ export abstract class Mmrcms extends Source {
     /**
      * Helps with CloudFlare for some sources, makes it worse for others; override with empty string if the latter is true
      */
-    userAgentRandomizer: string = ``;
+    userAgentRandomizer: string = `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/78.0${Math.floor(Math.random() * 100000)}`;
 
     parser = new Parser();
 
@@ -118,7 +118,7 @@ export abstract class Mmrcms extends Source {
         });
         const response = await this.requestManager.schedule(request, 1);
         this.CloudFlareError(response.status);
-        const mangaTiles = this.parser.parseSearchResults(response.data, query, this);
+        const mangaTiles = this.parser.parseSearchResults(JSON.parse(response.data), query, this);
         return createPagedResults({
             results: mangaTiles,
             metadata: undefined,
@@ -210,8 +210,8 @@ export abstract class Mmrcms extends Source {
         let mangaTiles: MangaTile[] = [];
         const collectedIds: Set<string> = new Set();
         // So that there is enough MangaTiles on the page to trigger the refresh when scrolling on big screens like ipads
-        // const minimumNumberOfTiles: number = 22; // Worst case scenario to have 4 lines of tiles on ipad
-        // while (mangaTiles.length < minimumNumberOfTiles && typeof metadata !== "undefined") {
+        const minimumNumberOfTiles: number = 22; // Worst case scenario to have 4 lines of tiles on ipad
+        while (mangaTiles.length < minimumNumberOfTiles && typeof metadata !== "undefined") {
             const page: number = metadata?.page ?? 1;
             let param: string = "";
             switch (homepageSectionId) {
@@ -247,7 +247,7 @@ export abstract class Mmrcms extends Source {
                     return Promise.resolve(null);
             }
             metadata = this.parser.isLastPage($) ? undefined : { page: page + 1 };
-        // }
+        }
         return createPagedResults({
             results: mangaTiles,
             metadata,
